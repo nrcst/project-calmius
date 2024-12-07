@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "com.l5.calmius"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.l5.calmius"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -57,6 +57,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation("io.coil-kt:coil-compose:2.2.2")
 
     //Room
     val room_version = "2.6.1"

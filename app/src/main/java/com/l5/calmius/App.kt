@@ -7,10 +7,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.l5.calmius.feature.journaling.data.JournalEntity
+import com.l5.calmius.feature.journaling.presentation.JournalAddScreen
 import com.l5.calmius.ui.theme.CalmiusTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,28 +21,26 @@ class MainActivity : ComponentActivity() {
         setContent {
             CalmiusTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
+                    JournalAddScreen(
+                        onSaveJournal = { journal ->
+                            saveJournal(journal)
+                        },
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+    private fun saveJournal(journal: JournalEntity) {
+        // Implement the logic to save the journal entry
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun JournalAddScreenPreview() {
     CalmiusTheme {
-        Greeting("Android")
+        JournalAddScreen(onSaveJournal = {})
     }
 }

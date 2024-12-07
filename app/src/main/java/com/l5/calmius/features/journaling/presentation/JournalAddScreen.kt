@@ -1,6 +1,7 @@
 package com.l5.calmius.feature.journaling.presentation
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,7 +21,8 @@ import java.time.LocalDate
 
 @Composable
 fun JournalAddScreen(
-    onSaveJournal: (JournalEntity) -> Unit
+    onSaveJournal: (JournalEntity) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val title = remember { mutableStateOf("") }
     val story = remember { mutableStateOf("") }
@@ -31,6 +33,11 @@ fun JournalAddScreen(
         modifier = Modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        MyImageArea(
+            uri = if (imageUrl.value.isNotEmpty()) Uri.parse(imageUrl.value) else null,
+            onSetUri = { uri -> imageUrl.value = uri.toString() }
+        )
+
         TextField(
             value = title.value,
             onValueChange = { title.value = it },
