@@ -211,7 +211,7 @@ fun CustomTextField(
 }
 
 @SuppressLint("NewApi")
-private fun getCurrentDate(): String {
+internal fun getCurrentDate(): String {
     val currentDate = LocalDate.now()
     return currentDate.toString()
 }

@@ -67,6 +67,7 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.2.1")
     implementation("androidx.navigation:navigation-compose:2.7.2")
 
+
     //Room
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
