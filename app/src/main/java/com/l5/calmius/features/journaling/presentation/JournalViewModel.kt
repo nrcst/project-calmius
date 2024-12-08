@@ -2,12 +2,14 @@ package com.l5.calmius.feature.journaling.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import com.l5.calmius.feature.journaling.data.JournalEntity
 import com.l5.calmius.feature.journaling.data.JournalRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 
 class JournalViewModel(
     private val journalRepository: JournalRepository
@@ -21,29 +23,40 @@ class JournalViewModel(
 
     fun loadJournals() {
         viewModelScope.launch {
-            _journals.value = journalRepository.getAllJournals()
+            withContext(Dispatchers.IO) {
+                _journals.value = journalRepository.getAllJournals()
+            }
         }
     }
 
-    suspend fun getJournalById(journalId: Long): JournalEntity {
-        return journalRepository.getJournalById(journalId)
+    fun getJournalById(journalId: Long, callback: (JournalEntity?) -> Unit) {
+        viewModelScope.launch {
+            val journal = withContext(Dispatchers.IO) {
+                journalRepository.getJournalById(journalId)
+            }
+            callback(journal)
+        }
     }
 
     fun saveJournal(journal: JournalEntity) {
         viewModelScope.launch {
-            if (journal.id == 0L) {
-                journalRepository.insertJournal(journal)
-            } else {
-                journalRepository.updateJournal(journal)
+            withContext(Dispatchers.IO) {
+                if (journal.id == 0L) {
+                    journalRepository.insertJournal(journal)
+                } else {
+                    journalRepository.updateJournal(journal)
+                }
+                loadJournals()
             }
-            loadJournals()
         }
     }
 
     fun deleteJournal(journal: JournalEntity) {
         viewModelScope.launch {
-            journalRepository.deleteJournal(journal)
-            loadJournals()
+            withContext(Dispatchers.IO) {
+                journalRepository.deleteJournal(journal)
+                loadJournals()
+            }
         }
     }
 }
