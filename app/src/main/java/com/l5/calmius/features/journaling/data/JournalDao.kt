@@ -9,13 +9,13 @@ import androidx.room.Update
 @Dao
 interface JournalDao {
     @Insert
-    suspend fun insert(journal: JournalEntity)
+    suspend fun insertJournal(journal: JournalEntity)
 
     @Update
-    suspend fun update(journal: JournalEntity)
+    suspend fun updateJournal(journal: JournalEntity)
 
     @Delete
-    suspend fun delete(journal: JournalEntity)
+    suspend fun deleteJournal(journal: JournalEntity)
 
     @Query("SELECT * FROM journals")
     fun getAllJournals(): List<JournalEntity>

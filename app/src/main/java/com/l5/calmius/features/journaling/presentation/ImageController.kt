@@ -6,13 +6,18 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -23,9 +28,9 @@ import java.io.File
 
 @Composable
 fun MyImageArea(
-    uri: Uri? = null, //target url to preview
+    uri: Uri? = null, // target url to preview
     directory: File? = null, // stored directory
-    onSetUri : (Uri) -> Unit = {}, // selected / taken uri
+    onSetUri: (Uri) -> Unit = {}, // selected / taken uri
 ) {
     val context = LocalContext.current
     val tempUri = remember { mutableStateOf<Uri?>(null) }
@@ -61,7 +66,7 @@ fun MyImageArea(
 
     val takePhotoLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture(),
-        onResult = {isSaved ->
+        onResult = { isSaved ->
             tempUri.value?.let {
                 onSetUri.invoke(it)
             }
@@ -74,15 +79,16 @@ fun MyImageArea(
         if (isGranted) {
             // Permission is granted, launch takePhotoLauncher
             val tmpUri = getTempUri()
-            tempUri.value = tmpUri
-            takePhotoLauncher.launch(tempUri.value!!)
+            tempUri.value?.let { uri ->
+                takePhotoLauncher.launch(uri)
+            }
         } else {
             // Permission is denied, handle it accordingly
         }
     }
 
     var showBottomSheet by remember { mutableStateOf(false) }
-    if (showBottomSheet){
+    if (showBottomSheet) {
         MyModalBottomSheet(
             onDismiss = {
                 showBottomSheet = false
@@ -116,39 +122,56 @@ fun MyImageArea(
         )
     }
 
-    Column (
+    Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            Button(
-                onClick = {
-                    showBottomSheet = true
-                }
-            ) {
-                Text(text = "Select / Take")
-            }
-        }
-
-        //preview selfie
-        uri?.let {
+        if (uri == null) {
             Box(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Button(
+                    onClick = {
+                        showBottomSheet = true
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Cyan),
+                    shape = RoundedCornerShape(15.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = null,
+                            tint = Color.Black,
+                            modifier = Modifier.size(48.dp)
+                        )
+                        Text(
+                            text = "Add your photo of the day",
+                            color = Color.Black
+                        )
+                    }
+                }
+            }
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .clickable { showBottomSheet = true },
                 contentAlignment = Alignment.Center
             ) {
                 AsyncImage(
-                    model = it,
-                    modifier = Modifier.size(
-                        160.dp
-                    ),
+                    model = uri,
+                    modifier = Modifier.fillMaxSize(),
                     contentDescription = null,
                 )
             }
-            Spacer(modifier = Modifier.height(16.dp))
         }
-
     }
 }
