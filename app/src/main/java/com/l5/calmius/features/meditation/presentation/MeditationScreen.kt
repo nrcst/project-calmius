@@ -1,67 +1,26 @@
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
+package com.l5.calmius.features.meditation.presentation
+
+import android.media.MediaPlayer
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-
+import com.l5.calmius.features.meditation.data.MeditationType
 
 @Composable
-fun MeditationScreen(
-    viewModel: MeditationViewModel = viewModel()
-) {
-    val meditations by viewModel.meditations.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-    val error by viewModel.error.collectAsState()
-
-    LaunchedEffect(Unit) {
-        viewModel.loadMeditations()
-    }
+fun MeditationScreen(onTypeSelected: (MeditationType) -> Unit) {
 
     Column {
-        // Your existing UI code
-        if (isLoading) {
-            CircularProgressIndicator()
-        }
-
-        error?.let { errorMessage ->
-            Text (
-                text = errorMessage,
-            )
-        }
-
-        LazyColumn {
-            items(meditations) { meditation ->
-                MeditationItem(meditation = meditation)
+        MeditationType.values().forEach { type ->
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .clickable { onTypeSelected(type) }) {
+                Text(text = type.name, modifier = Modifier.padding(16.dp))
             }
         }
     }
 }
 
-@Composable
-fun MeditationItem(meditation: Meditation) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text(text = meditation.name)
-            Text(text = meditation.description)
-            Text(text = "${meditation.duration} minutes")
-            Text(text = "Type: ${meditation.mood}")
-        }
-    }
-}
