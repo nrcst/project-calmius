@@ -1,4 +1,3 @@
-// meditation/MeditationApplication.kt
 package com.l5.calmius.features.meditation
 
 import android.app.Application
