@@ -104,7 +104,7 @@ fun AppNavHost(
         }
 
         // Journaling
-        composable("JournalList") {
+        composable("journal") {
             JournalListScreen(navController, modifier, journalViewModel)
         }
         composable("JournalAdd") {
