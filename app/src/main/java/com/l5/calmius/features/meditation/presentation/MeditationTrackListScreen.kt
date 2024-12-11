@@ -13,7 +13,7 @@ import com.l5.calmius.features.meditation.data.MeditationTrack
 import com.l5.calmius.features.meditation.data.MeditationType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import meditation.data.DatabaseProvider
+import com.l5.calmius.features.meditation.data.DatabaseProvider
 
 @Composable
 fun MeditationTrackListScreen(type: MeditationType, onTrackSelected: (MeditationTrack) -> Unit) {

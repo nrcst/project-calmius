@@ -1,9 +1,7 @@
-// meditation/data/DatabaseProvider.kt
-package meditation.data
+package com.l5.calmius.features.meditation.data
 
 import android.content.Context
 import androidx.room.Room
-import com.l5.calmius.features.meditation.data.AppDatabase
 import kotlinx.coroutines.CoroutineScope
 
 object DatabaseProvider {

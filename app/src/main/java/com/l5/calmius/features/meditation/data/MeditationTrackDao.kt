@@ -11,4 +11,7 @@ interface MeditationTrackDao {
 
     @Query("SELECT * FROM meditation_tracks WHERE meditationType = :type")
     suspend fun getTracksByType(type: MeditationType): List<MeditationTrack>
+
+    @Query("SELECT * FROM meditation_tracks WHERE id = :id")
+    suspend fun getTrackById(id: Int): MeditationTrack?
 }

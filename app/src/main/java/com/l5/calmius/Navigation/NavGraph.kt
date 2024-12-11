@@ -15,20 +15,22 @@ import com.l5.calmius.feature.journaling.presentation.JournalAddScreen
 import com.l5.calmius.feature.journaling.presentation.JournalListScreen
 import com.l5.calmius.feature.journaling.presentation.JournalViewModel
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.platform.LocalContext
 import com.l5.calmius.feature.journaling.presentation.JournalDetailScreen
 import com.l5.calmius.feature.journaling.presentation.JournalEditScreen
+import com.l5.calmius.features.meditation.data.DatabaseProvider
 import com.l5.calmius.features.meditation.data.MeditationTrack
 import com.l5.calmius.features.meditation.data.MeditationType
 import com.l5.calmius.features.meditation.presentation.FinishedScreen
 import com.l5.calmius.features.meditation.presentation.MeditationTrackListScreen
 import com.l5.calmius.features.meditation.presentation.PreStartScreen
 import com.l5.calmius.features.meditation.ui.PlayingScreen
-import com.l5.calmius.features.meditation.presentation.FinishedScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import meditation.data.DatabaseProvider
+import com.l5.calmius.Navigation.*
+
 
 @Composable
 fun AppNavHost(
@@ -38,11 +40,11 @@ fun AppNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.Meditation.route,
+        startDestination = "meditation",
         modifier = modifier
     ) {
         // Meditation
-        composable(Screen.Meditation.route) {
+        composable("meditation") {
             MeditationScreen { type ->
                 navController.navigate("meditationTrackList/${type.name}")
             }
@@ -53,48 +55,50 @@ fun AppNavHost(
                 navController.navigate("preStart/${track.id}")
             }
         }
-//        composable("preStart/{trackId}") { backStackEntry ->
-//            val trackId = backStackEntry.arguments?.getString("trackId")?.toInt() ?: 0
-//            val context = LocalContext.current
-//            val scope = rememberCoroutineScope()
-//            var track by remember { mutableStateOf<MeditationTrack?>(null) }
-//
-//            LaunchedEffect(trackId) {
-//                scope.launch {
-//                    val db = DatabaseProvider.getDatabase(context, CoroutineScope(Dispatchers.IO))
-//                    track = db.meditationTrackDao().getTrackById(trackId)
-//                }
-//            }
-//
-//            track?.let {
-//                PreStartScreen(track = it) {
-//                    navController.navigate("playing/${it.id}")
-//                }
-//            }
-//        }
-//        composable("playing/{trackId}") { backStackEntry ->
-//            val trackId = backStackEntry.arguments?.getString("trackId")?.toInt() ?: 0
-//            val context = LocalContext.current
-//            val scope = rememberCoroutineScope()
-//            var track by remember { mutableStateOf<MeditationTrack?>(null) }
-//
-//            LaunchedEffect(trackId) {
-//                scope.launch {
-//                    val db = DatabaseProvider.getDatabase(context, CoroutineScope(Dispatchers.IO))
-//                    track = db.meditationTrackDao().getTrackById(trackId)
-//                }
-//            }
-//
-//            track?.let {
-//                PlayingScreen(track = it) {
-//                    navController.navigate("finished")
-//                }
-//            }
-//        }
+        composable("preStart/{trackId}") { backStackEntry ->
+            val trackId = backStackEntry.arguments?.getString("trackId")?.toInt() ?: 0
+            val context = LocalContext.current
+            val scope = rememberCoroutineScope()
+            var track by remember { mutableStateOf<MeditationTrack?>(null) }
+
+            LaunchedEffect(trackId) {
+                scope.launch {
+                    val db = DatabaseProvider.getDatabase(context, CoroutineScope(Dispatchers.IO))
+                    track = db.meditationTrackDao().getTrackById(trackId)
+                }
+            }
+
+            track?.let {
+                PreStartScreen(track = it) {
+                    navController.navigate("playing/${it.id}")
+                }
+            }
+        }
+        composable("playing/{trackId}") { backStackEntry ->
+            val trackId = backStackEntry.arguments?.getString("trackId")?.toInt() ?: 0
+            val context = LocalContext.current
+            val scope = rememberCoroutineScope()
+            var track by remember { mutableStateOf<MeditationTrack?>(null) }
+
+            LaunchedEffect(trackId) {
+                scope.launch {
+                    val db = DatabaseProvider.getDatabase(context, CoroutineScope(Dispatchers.IO))
+                    track = db.meditationTrackDao().getTrackById(trackId)
+                }
+            }
+
+            track?.let {
+                PlayingScreen(track = it) {
+                    navController.navigate("finished")
+                }
+            }
+        }
         composable("finished") {
             FinishedScreen {
-                navController.navigate(Screen.Meditation.route) {
-                    popUpTo(Screen.Meditation.route) { inclusive = true }
+                navController.navigate("meditation") {
+                    popUpTo("meditation") {
+                        inclusive = true
+                    }
                 }
             }
         }
