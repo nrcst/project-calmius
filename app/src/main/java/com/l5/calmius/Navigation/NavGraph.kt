@@ -112,11 +112,11 @@ fun AppNavHost(
         }
         composable("JournalDetail/{journalId}") { backStackEntry ->
             val journalId = backStackEntry.arguments?.getString("journalId")?.toLong() ?: 0L
-            JournalDetailScreen(navController, journalId)
+            JournalDetailScreen(navController, journalId,modifier)
         }
         composable("JournalEdit/{journalId}") { backStackEntry ->
             val journalId = backStackEntry.arguments?.getString("journalId")?.toLong() ?: 0L
-            JournalEditScreen(navController, journalId)
+            JournalEditScreen(navController, journalId,modifier, journalViewModel)
         }
     }
 }

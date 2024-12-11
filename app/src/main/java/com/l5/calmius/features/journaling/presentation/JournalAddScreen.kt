@@ -42,6 +42,9 @@ import androidx.navigation.NavHostController
 import com.l5.calmius.feature.journaling.data.JournalEntity
 import com.l5.calmius.feature.journaling.data.JournalRepository
 import com.l5.calmius.features.journaling.data.JournalDatabase
+import com.l5.calmius.ui.theme.Blue400
+import com.l5.calmius.ui.theme.Blue75
+import com.l5.calmius.ui.theme.Typography
 import java.time.LocalDate
 import kotlin.toString
 
@@ -103,8 +106,9 @@ fun JournalAddScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
+                    modifier = Modifier.size(40.dp),
                     contentDescription = "Back",
-                    tint = Color.White
+                    tint = Color.Black
                 )
             }
             Column(
@@ -115,8 +119,7 @@ fun JournalAddScreen(
                 ) {
                     Text(
                         text = "Write Your Stories",
-                        fontSize = 40.sp,
-                        fontWeight = FontWeight.Bold
+                        style = Typography.displayMedium
                     )
                 }
                 Box(
@@ -124,8 +127,7 @@ fun JournalAddScreen(
                 ) {
                     Text(
                         text = "Today",
-                        fontSize = 40.sp,
-                        fontWeight = FontWeight.Bold
+                        style = Typography.displayMedium
                     )
                 }
             }
@@ -171,7 +173,9 @@ fun JournalAddScreen(
                     }
                 }
             },
+            colors = ButtonDefaults.buttonColors(containerColor = Blue400),
             modifier = Modifier.align(Alignment.CenterHorizontally)
+
         ) {
             Text("Submit")
         }
@@ -190,7 +194,7 @@ fun CustomTextField(
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
-            .background(Color.Cyan, RoundedCornerShape(15.dp))
+            .background(Blue75, RoundedCornerShape(15.dp))
             .padding(16.dp)
     ) {
         TextField(
@@ -199,7 +203,9 @@ fun CustomTextField(
             modifier = Modifier.fillMaxWidth(),
             maxLines = maxLines,
             placeholder = {
-                Text(text = label, color = Color.Gray)
+                Text(text = label,
+                    color = Color.Black,
+                    style = Typography.bodyMedium)
             },
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color.Transparent,
@@ -211,7 +217,7 @@ fun CustomTextField(
 }
 
 @SuppressLint("NewApi")
-internal fun getCurrentDate(): String {
+fun getCurrentDate(): String {
     val currentDate = LocalDate.now()
     return currentDate.toString()
 }

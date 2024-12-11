@@ -24,6 +24,7 @@ import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
 import com.l5.calmius.R
 import com.l5.calmius.features.journaling.presentation.MyModalBottomSheet
+import com.l5.calmius.ui.theme.Blue75
 import java.io.File
 
 @Composable
@@ -135,7 +136,7 @@ fun MyImageArea(
                     onClick = {
                         showBottomSheet = true
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Cyan),
+                    colors = ButtonDefaults.buttonColors(containerColor = Blue75),
                     shape = RoundedCornerShape(15.dp),
                     modifier = Modifier
                         .fillMaxWidth()

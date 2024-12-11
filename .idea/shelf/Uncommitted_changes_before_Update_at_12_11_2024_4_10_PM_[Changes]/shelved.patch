@@ -1,0 +1,240 @@
+Index: app/build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    alias(libs.plugins.android.application)\r\n    alias(libs.plugins.kotlin.android)\r\n    alias(libs.plugins.kotlin.compose)\r\n    id(\"com.google.devtools.ksp\")\r\n}\r\n\r\nandroid {\r\n    namespace = \"com.l5.calmius\"\r\n    compileSdk = 35\r\n\r\n    defaultConfig {\r\n        applicationId = \"com.l5.calmius\"\r\n        minSdk = 24\r\n        targetSdk = 35\r\n        versionCode = 1\r\n        versionName = \"1.0\"\r\n\r\n        testInstrumentationRunner = \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            isMinifyEnabled = false\r\n            proguardFiles(\r\n                getDefaultProguardFile(\"proguard-android-optimize.txt\"),\r\n                \"proguard-rules.pro\"\r\n            )\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility = JavaVersion.VERSION_11\r\n        targetCompatibility = JavaVersion.VERSION_11\r\n    }\r\n    kotlinOptions {\r\n        jvmTarget = \"11\"\r\n    }\r\n    buildFeatures {\r\n        compose = true\r\n    }\r\n}\r\n\r\ndependencies {\r\n\r\n    implementation(libs.androidx.core.ktx)\r\n    implementation(libs.androidx.lifecycle.runtime.ktx)\r\n    implementation(libs.androidx.activity.compose)\r\n    implementation(platform(libs.androidx.compose.bom))\r\n    implementation(libs.androidx.ui)\r\n    implementation(libs.androidx.ui.graphics)\r\n    implementation(libs.androidx.ui.tooling.preview)\r\n    implementation(libs.androidx.material3)\r\n    implementation(libs.firebase.auth.ktx)\r\n    implementation(libs.firebase.firestore.ktx)\r\n    testImplementation(libs.junit)\r\n    androidTestImplementation(libs.androidx.junit)\r\n    androidTestImplementation(libs.androidx.espresso.core)\r\n    androidTestImplementation(platform(libs.androidx.compose.bom))\r\n    androidTestImplementation(libs.androidx.ui.test.junit4)\r\n    debugImplementation(libs.androidx.ui.tooling)\r\n    debugImplementation(libs.androidx.ui.test.manifest)\r\n    implementation(\"org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4\")\r\n    implementation(\"org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4\")\r\n    implementation(\"io.coil-kt:coil-compose:2.2.2\")\r\n    implementation(\"androidx.lifecycle:lifecycle-viewmodel-compose\")\r\n    implementation(\"androidx.compose.ui:ui:1.6.6\")\r\n    implementation(\"androidx.compose.material3:material3:1.2.1\")\r\n    implementation(\"androidx.navigation:navigation-compose:2.7.2\")\r\n\r\n    //Room\r\n    val room_version = \"2.6.1\"\r\n    implementation(\"androidx.room:room-runtime:$room_version\")\r\n    ksp(\"androidx.room:room-compiler:$room_version\")\r\n    implementation(\"androidx.room:room-ktx:$room_version\")\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+--- a/app/build.gradle.kts	(revision 95a67537b6b5d6340a52b3d09ba2d7e930634ec4)
++++ b/app/build.gradle.kts	(date 1733907911425)
+@@ -1,8 +1,10 @@
++import org.gradle.kotlin.dsl.android
++
+ plugins {
+     alias(libs.plugins.android.application)
+     alias(libs.plugins.kotlin.android)
+     alias(libs.plugins.kotlin.compose)
+-    id("com.google.devtools.ksp")
++    id("com.google.devtools.ksp") version "2.0.0-1.0.22"
+ }
+ 
+ android {
+@@ -50,8 +52,6 @@
+     implementation(libs.androidx.ui.graphics)
+     implementation(libs.androidx.ui.tooling.preview)
+     implementation(libs.androidx.material3)
+-    implementation(libs.firebase.auth.ktx)
+-    implementation(libs.firebase.firestore.ktx)
+     testImplementation(libs.junit)
+     androidTestImplementation(libs.androidx.junit)
+     androidTestImplementation(libs.androidx.espresso.core)
+@@ -66,6 +66,7 @@
+     implementation("androidx.compose.ui:ui:1.6.6")
+     implementation("androidx.compose.material3:material3:1.2.1")
+     implementation("androidx.navigation:navigation-compose:2.7.2")
++    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.10")
+ 
+     //Room
+     val room_version = "2.6.1"
+Index: build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// Top-level build file where you can add configuration options common to all sub-projects/modules.\r\nplugins {\r\n    alias(libs.plugins.android.application) apply false\r\n    alias(libs.plugins.kotlin.android) apply false\r\n    alias(libs.plugins.kotlin.compose) apply false\r\n    id(\"com.google.devtools.ksp\") version \"1.9.0-1.0.13\" apply false\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build.gradle.kts b/build.gradle.kts
+--- a/build.gradle.kts	(revision 95a67537b6b5d6340a52b3d09ba2d7e930634ec4)
++++ b/build.gradle.kts	(date 1733907724804)
+@@ -3,5 +3,5 @@
+     alias(libs.plugins.android.application) apply false
+     alias(libs.plugins.kotlin.android) apply false
+     alias(libs.plugins.kotlin.compose) apply false
+-    id("com.google.devtools.ksp") version "1.9.0-1.0.13" apply false
++    id("com.google.devtools.ksp") version "2.0.0-1.0.22" apply false
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/l5/calmius/features/journaling/presentation/JournalEditScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.l5.calmius.feature.journaling.presentation\r\n\r\nimport android.net.Uri\r\nimport androidx.compose.foundation.background\r\nimport androidx.compose.foundation.layout.*\r\nimport androidx.compose.foundation.shape.CircleShape\r\nimport androidx.compose.foundation.shape.RoundedCornerShape\r\nimport androidx.compose.material.icons.Icons\r\nimport androidx.compose.material.icons.filled.ArrowBack\r\nimport androidx.compose.material3.*\r\nimport androidx.compose.runtime.*\r\nimport androidx.compose.ui.*\r\nimport androidx.compose.ui.graphics.Color\r\nimport androidx.compose.ui.platform.LocalContext\r\nimport androidx.compose.ui.text.font.FontWeight\r\nimport androidx.compose.ui.unit.dp\r\nimport androidx.compose.ui.unit.sp\r\nimport androidx.lifecycle.viewModelScope\r\nimport androidx.navigation.NavController\r\nimport com.l5.calmius.feature.journaling.data.JournalEntity\r\nimport com.l5.calmius.feature.journaling.data.JournalRepository\r\nimport com.l5.calmius.features.journaling.data.JournalDatabase\r\nimport kotlinx.coroutines.Dispatchers\r\nimport kotlinx.coroutines.launch\r\nimport kotlinx.coroutines.withContext\r\n\r\n@Composable\r\nfun JournalEditScreen(\r\n    navController: NavController,\r\n    journalId: Long,\r\n    modifier: Modifier = Modifier\r\n) {\r\n    val context = LocalContext.current\r\n    val journalViewModel = JournalViewModel(\r\n        JournalRepository(\r\n            journalDao = JournalDatabase.getDatabase(context).journalDao()\r\n        )\r\n    )\r\n    val journalState = produceState<JournalEntity?>(initialValue = null, journalId) {\r\n        journalViewModel.getJournalById(journalId) { journal ->\r\n            value = journal\r\n        }\r\n    }\r\n    val journal = journalState.value\r\n    val title = remember { mutableStateOf(journal?.title ?: \"\") }\r\n    val story = remember { mutableStateOf(journal?.story ?: \"\") }\r\n    val gratitude = remember { mutableStateOf(journal?.gratitude ?: \"\") }\r\n    val imageUrl = remember { mutableStateOf(journal?.imageUrl ?: \"\") }\r\n    val showDialog = remember { mutableStateOf(false) }\r\n\r\n    if (showDialog.value) {\r\n        AlertDialog(\r\n            onDismissRequest = { showDialog.value = false },\r\n            title = { Text(\"Cancel\") },\r\n            text = { Text(\"Are you sure you want to cancel?\") },\r\n            confirmButton = {\r\n                TextButton(onClick = {\r\n                    showDialog.value = false\r\n                    navController.popBackStack()\r\n                }) {\r\n                    Text(\"Yes\")\r\n                }\r\n            },\r\n            dismissButton = {\r\n                TextButton(onClick = { showDialog.value = false }) {\r\n                    Text(\"No\")\r\n                }\r\n            }\r\n        )\r\n    }\r\n\r\n    Column(\r\n        modifier = modifier.padding(16.dp),\r\n        verticalArrangement = Arrangement.spacedBy(16.dp)\r\n    ) {\r\n        Row {\r\n            Button(\r\n                onClick = {\r\n                    showDialog.value = true\r\n                },\r\n                shape = CircleShape,\r\n                colors = ButtonDefaults.buttonColors(\r\n                    containerColor = Color.Gray,\r\n                    contentColor = Color.Black\r\n                ),\r\n                modifier = Modifier\r\n                    .padding(8.dp)\r\n                    .size(50.dp)\r\n            ) {\r\n                Icon(\r\n                    imageVector = Icons.Default.ArrowBack,\r\n                    contentDescription = \"Back\",\r\n                    tint = Color.White\r\n                )\r\n            }\r\n            Column(\r\n                modifier = Modifier.fillMaxWidth()\r\n            ) {\r\n                Box(\r\n                    modifier = Modifier.fillMaxWidth()\r\n                ) {\r\n                    Text(\r\n                        text = \"Edit Your Stories\",\r\n                        fontSize = 40.sp,\r\n                        fontWeight = FontWeight.Bold\r\n                    )\r\n                }\r\n                Box(\r\n                    modifier = Modifier.fillMaxWidth()\r\n                ) {\r\n                    Text(\r\n                        text = \"Today\",\r\n                        fontSize = 40.sp,\r\n                        fontWeight = FontWeight.Bold\r\n                    )\r\n                }\r\n            }\r\n        }\r\n        MyImageArea(\r\n            uri = if (imageUrl.value.isNotEmpty()) Uri.parse(imageUrl.value) else null,\r\n            onSetUri = { uri -> imageUrl.value = uri.toString() }\r\n        )\r\n\r\n        CustomTextField(\r\n            value = title.value,\r\n            onValueChange = { newValue: String -> title.value = newValue },\r\n            label = \"Title\"\r\n        )\r\n\r\n        CustomTextField(\r\n            value = story.value,\r\n            onValueChange = { newValue: String -> story.value = newValue },\r\n            label = \"How was your day?\",\r\n            maxLines = 10\r\n        )\r\n\r\n        CustomTextField(\r\n            value = gratitude.value,\r\n            onValueChange = { newValue: String -> gratitude.value = newValue },\r\n            label = \"What are you grateful today?\",\r\n            maxLines = 10\r\n        )\r\n\r\n        Row(\r\n            modifier = Modifier.fillMaxWidth(),\r\n            horizontalArrangement = Arrangement.SpaceEvenly\r\n        ) {\r\n            if (journal != null) {\r\n                Button(\r\n                    onClick = {\r\n                        journalViewModel.deleteJournal(journal)\r\n                        navController.navigate(\"JournalList\")\r\n                    }\r\n                ) {\r\n                    Text(\"Delete\")\r\n                }\r\n            }\r\n\r\n            Button(\r\n                onClick = {\r\n                    val updatedJournal = journal?.copy(\r\n                        title = title.value,\r\n                        story = story.value,\r\n                        gratitude = gratitude.value,\r\n                        imageUrl = imageUrl.value\r\n                    ) ?: JournalEntity(\r\n                        date = getCurrentDate(),\r\n                        title = title.value,\r\n                        story = story.value,\r\n                        gratitude = gratitude.value,\r\n                        imageUrl = imageUrl.value\r\n                    )\r\n                    journalViewModel.viewModelScope.launch(Dispatchers.IO) {\r\n                        journalViewModel.saveJournal(updatedJournal)\r\n                        withContext(Dispatchers.Main) {\r\n                            navController.navigate(\"JournalList\")\r\n                        }\r\n                    }\r\n                }\r\n            ) {\r\n                Text(\"Submit\")\r\n            }\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/l5/calmius/features/journaling/presentation/JournalEditScreen.kt b/app/src/main/java/com/l5/calmius/features/journaling/presentation/JournalEditScreen.kt
+--- a/app/src/main/java/com/l5/calmius/features/journaling/presentation/JournalEditScreen.kt	(revision 95a67537b6b5d6340a52b3d09ba2d7e930634ec4)
++++ b/app/src/main/java/com/l5/calmius/features/journaling/presentation/JournalEditScreen.kt	(date 1733650623423)
+@@ -8,6 +8,7 @@
+ import androidx.compose.material.icons.Icons
+ import androidx.compose.material.icons.filled.ArrowBack
+ import androidx.compose.material3.*
++import androidx.compose.material3.ButtonDefaults
+ import androidx.compose.runtime.*
+ import androidx.compose.ui.*
+ import androidx.compose.ui.graphics.Color
+@@ -20,6 +21,7 @@
+ import com.l5.calmius.feature.journaling.data.JournalEntity
+ import com.l5.calmius.feature.journaling.data.JournalRepository
+ import com.l5.calmius.features.journaling.data.JournalDatabase
++import com.l5.calmius.ui.theme.Blue400
+ import kotlinx.coroutines.Dispatchers
+ import kotlinx.coroutines.launch
+ import kotlinx.coroutines.withContext
+@@ -105,15 +107,6 @@
+                         fontWeight = FontWeight.Bold
+                     )
+                 }
+-                Box(
+-                    modifier = Modifier.fillMaxWidth()
+-                ) {
+-                    Text(
+-                        text = "Today",
+-                        fontSize = 40.sp,
+-                        fontWeight = FontWeight.Bold
+-                    )
+-                }
+             }
+         }
+         MyImageArea(
+@@ -150,7 +143,8 @@
+                     onClick = {
+                         journalViewModel.deleteJournal(journal)
+                         navController.navigate("JournalList")
+-                    }
++                    },
++                    colors = ButtonDefaults.buttonColors(containerColor = Blue400)
+                 ) {
+                     Text("Delete")
+                 }
+@@ -176,7 +170,8 @@
+                             navController.navigate("JournalList")
+                         }
+                     }
+-                }
++                },
++                colors = ButtonDefaults.buttonColors(containerColor = Blue400)
+             ) {
+                 Text("Submit")
+             }
+Index: app/src/main/java/com/l5/calmius/features/journaling/presentation/JournalAddScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.l5.calmius.feature.journaling.presentation\r\n\r\nimport android.annotation.SuppressLint\r\nimport androidx.compose.material3.AlertDialog\r\nimport androidx.compose.material3.TextButton\r\nimport android.net.Uri\r\nimport androidx.lifecycle.viewModelScope\r\nimport kotlinx.coroutines.Dispatchers\r\nimport kotlinx.coroutines.launch\r\nimport kotlinx.coroutines.withContext\r\nimport androidx.compose.foundation.background\r\nimport androidx.compose.foundation.layout.Arrangement\r\nimport androidx.compose.foundation.layout.Box\r\nimport androidx.compose.foundation.layout.Column\r\nimport androidx.compose.foundation.layout.Row\r\nimport androidx.compose.foundation.layout.fillMaxWidth\r\nimport androidx.compose.foundation.layout.height\r\nimport androidx.compose.foundation.layout.padding\r\nimport androidx.compose.foundation.layout.size\r\nimport androidx.compose.foundation.shape.CircleShape\r\nimport androidx.compose.foundation.shape.RoundedCornerShape\r\nimport androidx.compose.material.icons.Icons\r\nimport androidx.compose.material.icons.filled.ArrowBack\r\nimport androidx.compose.material3.Button\r\nimport androidx.compose.material3.ButtonDefaults\r\nimport androidx.compose.material3.ExperimentalMaterial3Api\r\nimport androidx.compose.material3.Icon\r\nimport androidx.compose.material3.Text\r\nimport androidx.compose.material3.TextField\r\nimport androidx.compose.material3.TextFieldDefaults\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.runtime.mutableStateOf\r\nimport androidx.compose.runtime.remember\r\nimport androidx.compose.ui.Alignment\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.compose.ui.graphics.Color\r\nimport androidx.compose.ui.platform.LocalContext\r\nimport androidx.compose.ui.text.font.FontWeight\r\nimport androidx.compose.ui.unit.dp\r\nimport androidx.compose.ui.unit.sp\r\nimport androidx.navigation.NavHostController\r\nimport com.l5.calmius.feature.journaling.data.JournalEntity\r\nimport com.l5.calmius.feature.journaling.data.JournalRepository\r\nimport com.l5.calmius.features.journaling.data.JournalDatabase\r\nimport java.time.LocalDate\r\nimport kotlin.toString\r\n\r\n@Composable\r\nfun JournalAddScreen(\r\n    navHostController: NavHostController,\r\n    modifier: Modifier = Modifier,\r\n) {\r\n    val context = LocalContext.current\r\n    val journalViewModel = JournalViewModel(\r\n        JournalRepository(\r\n            journalDao = JournalDatabase.getDatabase(context).journalDao()\r\n        )\r\n    )\r\n    val title = remember { mutableStateOf(\"\") }\r\n    val story = remember { mutableStateOf(\"\") }\r\n    val gratitude = remember { mutableStateOf(\"\") }\r\n    val imageUrl = remember { mutableStateOf(\"\") }\r\n    val showDialog = remember { mutableStateOf(false) }\r\n\r\n    if (showDialog.value) {\r\n        AlertDialog(\r\n            onDismissRequest = { showDialog.value = false },\r\n            title = { Text(\"Cancel\") },\r\n            text = { Text(\"Are you sure you want to cancel?\") },\r\n            confirmButton = {\r\n                TextButton(onClick = {\r\n                    showDialog.value = false\r\n                    navHostController.popBackStack()\r\n                }) {\r\n                    Text(\"Yes\")\r\n                }\r\n            },\r\n            dismissButton = {\r\n                TextButton(onClick = { showDialog.value = false }) {\r\n                    Text(\"No\")\r\n                }\r\n            }\r\n        )\r\n    }\r\n\r\n    Column(\r\n        modifier = modifier.padding(16.dp),\r\n        verticalArrangement = Arrangement.spacedBy(16.dp)\r\n    ) {\r\n        Row {\r\n            Button(\r\n                onClick = {\r\n                    showDialog.value = true\r\n                },\r\n                shape = CircleShape,\r\n                colors = ButtonDefaults.buttonColors(\r\n                    containerColor = Color.Gray,\r\n                    contentColor = Color.Black\r\n                ),\r\n                modifier = Modifier\r\n                    .padding(8.dp)\r\n                    .size(50.dp)\r\n            ) {\r\n                Icon(\r\n                    imageVector = Icons.Default.ArrowBack,\r\n                    contentDescription = \"Back\",\r\n                    tint = Color.White\r\n                )\r\n            }\r\n            Column(\r\n                modifier = Modifier.fillMaxWidth()\r\n            ) {\r\n                Box(\r\n                    modifier = Modifier.fillMaxWidth()\r\n                ) {\r\n                    Text(\r\n                        text = \"Write Your Stories\",\r\n                        fontSize = 40.sp,\r\n                        fontWeight = FontWeight.Bold\r\n                    )\r\n                }\r\n                Box(\r\n                    modifier = Modifier.fillMaxWidth()\r\n                ) {\r\n                    Text(\r\n                        text = \"Today\",\r\n                        fontSize = 40.sp,\r\n                        fontWeight = FontWeight.Bold\r\n                    )\r\n                }\r\n            }\r\n        }\r\n        MyImageArea(\r\n            uri = if (imageUrl.value.isNotEmpty()) Uri.parse(imageUrl.value) else null,\r\n            onSetUri = { uri -> imageUrl.value = uri.toString() }\r\n        )\r\n\r\n        CustomTextField(\r\n            value = title.value,\r\n            onValueChange = { title.value = it },\r\n            label = \"Title\"\r\n        )\r\n\r\n        CustomTextField(\r\n            value = story.value,\r\n            onValueChange = { story.value = it },\r\n            label = \"How was your day?\",\r\n            maxLines = 10\r\n        )\r\n\r\n        CustomTextField(\r\n            value = gratitude.value,\r\n            onValueChange = { gratitude.value = it },\r\n            label = \"What are you grateful today?\",\r\n            maxLines = 10\r\n        )\r\n\r\n        Button(\r\n            onClick = {\r\n                val newJournal = JournalEntity(\r\n                    date = getCurrentDate(),\r\n                    title = title.value,\r\n                    story = story.value,\r\n                    gratitude = gratitude.value,\r\n                    imageUrl = imageUrl.value\r\n                )\r\n                journalViewModel.viewModelScope.launch(Dispatchers.IO) {\r\n                    journalViewModel.saveJournal(newJournal)\r\n                    withContext(Dispatchers.Main) {\r\n                        navHostController.popBackStack()\r\n                    }\r\n                }\r\n            },\r\n            modifier = Modifier.align(Alignment.CenterHorizontally)\r\n        ) {\r\n            Text(\"Submit\")\r\n        }\r\n    }\r\n}\r\n\r\n@OptIn(ExperimentalMaterial3Api::class)\r\n@Composable\r\nfun CustomTextField(\r\n    value: String,\r\n    onValueChange: (String) -> Unit,\r\n    label: String,\r\n    maxLines: Int = 1\r\n) {\r\n    Box(\r\n        modifier = Modifier\r\n            .fillMaxWidth()\r\n            .height(200.dp)\r\n            .background(Color.Cyan, RoundedCornerShape(15.dp))\r\n            .padding(16.dp)\r\n    ) {\r\n        TextField(\r\n            value = value,\r\n            onValueChange = onValueChange,\r\n            modifier = Modifier.fillMaxWidth(),\r\n            maxLines = maxLines,\r\n            placeholder = {\r\n                Text(text = label, color = Color.Gray)\r\n            },\r\n            colors = TextFieldDefaults.textFieldColors(\r\n                containerColor = Color.Transparent,\r\n                focusedIndicatorColor = Color.Transparent,\r\n                unfocusedIndicatorColor = Color.Transparent\r\n            )\r\n        )\r\n    }\r\n}\r\n\r\n@SuppressLint(\"NewApi\")\r\nprivate fun getCurrentDate(): String {\r\n    val currentDate = LocalDate.now()\r\n    return currentDate.toString()\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/l5/calmius/features/journaling/presentation/JournalAddScreen.kt b/app/src/main/java/com/l5/calmius/features/journaling/presentation/JournalAddScreen.kt
+--- a/app/src/main/java/com/l5/calmius/features/journaling/presentation/JournalAddScreen.kt	(revision 95a67537b6b5d6340a52b3d09ba2d7e930634ec4)
++++ b/app/src/main/java/com/l5/calmius/features/journaling/presentation/JournalAddScreen.kt	(date 1733908067359)
+@@ -42,6 +42,8 @@
+ import com.l5.calmius.feature.journaling.data.JournalEntity
+ import com.l5.calmius.feature.journaling.data.JournalRepository
+ import com.l5.calmius.features.journaling.data.JournalDatabase
++import com.l5.calmius.ui.theme.Blue400
++import com.l5.calmius.ui.theme.Blue75
+ import java.time.LocalDate
+ import kotlin.toString
+ 
+@@ -171,7 +173,9 @@
+                     }
+                 }
+             },
++            colors = ButtonDefaults.buttonColors(containerColor = Blue400),
+             modifier = Modifier.align(Alignment.CenterHorizontally)
++
+         ) {
+             Text("Submit")
+         }
+@@ -192,6 +196,7 @@
+             .height(200.dp)
+             .background(Color.Cyan, RoundedCornerShape(15.dp))
+             .padding(16.dp)
++            .background(Blue75, RoundedCornerShape(15.dp))
+     ) {
+         TextField(
+             value = value,
+@@ -211,7 +216,7 @@
+ }
+ 
+ @SuppressLint("NewApi")
+-private fun getCurrentDate(): String {
++fun getCurrentDate(): String {
+     val currentDate = LocalDate.now()
+     return currentDate.toString()
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/l5/calmius/features/journaling/presentation/JournalListItem.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.l5.calmius.features.journaling.presentation\r\n\r\nimport androidx.compose.foundation.layout.Column\r\nimport androidx.compose.foundation.layout.fillMaxWidth\r\nimport androidx.compose.foundation.layout.height\r\nimport androidx.compose.foundation.layout.padding\r\nimport androidx.compose.foundation.shape.RoundedCornerShape\r\nimport androidx.compose.material3.Card\r\nimport androidx.compose.material3.CardDefaults\r\nimport androidx.compose.material3.MaterialTheme\r\nimport androidx.compose.material3.Text\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.compose.ui.draw.clip\r\nimport androidx.compose.ui.layout.ContentScale\r\nimport androidx.compose.ui.text.font.FontWeight\r\nimport androidx.compose.ui.text.style.TextOverflow\r\nimport androidx.compose.ui.unit.dp\r\nimport androidx.navigation.NavController\r\nimport coil.compose.AsyncImage\r\nimport com.l5.calmius.feature.journaling.data.JournalEntity\r\nimport com.l5.calmius.feature.journaling.presentation.JournalViewModel\r\n\r\n@Composable\r\nfun JournalListItem(\r\n    navController: NavController,\r\n    journal: JournalEntity,\r\n    journalViewModel: JournalViewModel,\r\n) {\r\n    Card(\r\n        modifier = Modifier\r\n            .padding(8.dp)\r\n            .fillMaxWidth()\r\n            .clip(RoundedCornerShape(8.dp)),\r\n        elevation = CardDefaults.cardElevation(4.dp),\r\n        onClick = {\r\n            navController.navigate(\"journalDetail/${journal.id}\")\r\n        }\r\n    ) {\r\n        Column(\r\n            modifier = Modifier.padding(16.dp)\r\n        ) {\r\n            Text(\r\n                text = journal.title,\r\n                fontWeight = FontWeight.Bold,\r\n                modifier = Modifier.fillMaxWidth()\r\n            )\r\n            Text(\r\n                text = journal.date,\r\n                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Light),\r\n                modifier = Modifier.fillMaxWidth()\r\n            )\r\n            AsyncImage(\r\n                model = journal.imageUrl,\r\n                contentDescription = null,\r\n                contentScale = ContentScale.Crop,\r\n                modifier = Modifier\r\n                    .fillMaxWidth()\r\n                    .height(200.dp)\r\n                    .clip(RoundedCornerShape(8.dp))\r\n            )\r\n            Text(\r\n                text = journal.story,\r\n                maxLines = 3,\r\n                overflow = TextOverflow.Ellipsis,\r\n                modifier = Modifier.fillMaxWidth()\r\n            )\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/l5/calmius/features/journaling/presentation/JournalListItem.kt b/app/src/main/java/com/l5/calmius/features/journaling/presentation/JournalListItem.kt
+--- a/app/src/main/java/com/l5/calmius/features/journaling/presentation/JournalListItem.kt	(revision 95a67537b6b5d6340a52b3d09ba2d7e930634ec4)
++++ b/app/src/main/java/com/l5/calmius/features/journaling/presentation/JournalListItem.kt	(date 1733650313116)
+@@ -20,6 +20,7 @@
+ import coil.compose.AsyncImage
+ import com.l5.calmius.feature.journaling.data.JournalEntity
+ import com.l5.calmius.feature.journaling.presentation.JournalViewModel
++import com.l5.calmius.ui.theme.Blue75
+ 
+ @Composable
+ fun JournalListItem(
+@@ -33,6 +34,7 @@
+             .fillMaxWidth()
+             .clip(RoundedCornerShape(8.dp)),
+         elevation = CardDefaults.cardElevation(4.dp),
++        colors = CardDefaults.cardColors(containerColor = Blue75),
+         onClick = {
+             navController.navigate("journalDetail/${journal.id}")
+         }
+Index: .idea/deploymentTargetSelector.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"deploymentTargetSelector\">\r\n    <selectionStates>\r\n<<<<<<< Updated upstream\r\n      <SelectionState runConfigName=\"Calmius.app\">\r\n=======\r\n      <SelectionState runConfigName=\"MainActivity\">\r\n>>>>>>> Stashed changes\r\n        <option name=\"selectionMode\" value=\"DROPDOWN\" />\r\n      </SelectionState>\r\n    </selectionStates>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/deploymentTargetSelector.xml b/.idea/deploymentTargetSelector.xml
+--- a/.idea/deploymentTargetSelector.xml	(revision 95a67537b6b5d6340a52b3d09ba2d7e930634ec4)
++++ b/.idea/deploymentTargetSelector.xml	(date 1733820218420)
+@@ -2,11 +2,7 @@
+ <project version="4">
+   <component name="deploymentTargetSelector">
+     <selectionStates>
+-<<<<<<< Updated upstream
+-      <SelectionState runConfigName="Calmius.app">
+-=======
+       <SelectionState runConfigName="MainActivity">
+->>>>>>> Stashed changes
+         <option name="selectionMode" value="DROPDOWN" />
+       </SelectionState>
+     </selectionStates>
+Index: app/src/main/java/com/l5/calmius/ui/theme/Color.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.l5.calmius.ui.theme\r\n\r\nimport androidx.compose.ui.graphics.Color\r\n\r\nval Purple80 = Color(0xFFD0BCFF)\r\nval PurpleGrey80 = Color(0xFFCCC2DC)\r\nval Pink80 = Color(0xFFEFB8C8)\r\n\r\nval Purple40 = Color(0xFF6650a4)\r\nval PurpleGrey40 = Color(0xFF625b71)\r\nval Pink40 = Color(0xFF7D5260)
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/l5/calmius/ui/theme/Color.kt b/app/src/main/java/com/l5/calmius/ui/theme/Color.kt
+--- a/app/src/main/java/com/l5/calmius/ui/theme/Color.kt	(revision 95a67537b6b5d6340a52b3d09ba2d7e930634ec4)
++++ b/app/src/main/java/com/l5/calmius/ui/theme/Color.kt	(date 1733650200217)
+@@ -8,4 +8,12 @@
+ 
+ val Purple40 = Color(0xFF6650a4)
+ val PurpleGrey40 = Color(0xFF625b71)
+-val Pink40 = Color(0xFF7D5260)
+\ No newline at end of file
++val Pink40 = Color(0xFF7D5260)
++
++val Blue50 = Color(0xFFF6FBFF)
++val Blue75 = Color(0xFFDAEFFF)
++val Blue100 = Color(0xFFCBE8FF)
++val Blue200 = Color(0xFFB4DFFF)
++val Blue300 = Color(0xFFA5D8FF)
++val Blue400 = Color(0xFF7397B3)
++val Blue500 = Color(0xFF65849C)
+\ No newline at end of file
