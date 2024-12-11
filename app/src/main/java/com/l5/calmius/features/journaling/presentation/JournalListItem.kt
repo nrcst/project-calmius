@@ -20,6 +20,8 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.l5.calmius.feature.journaling.data.JournalEntity
 import com.l5.calmius.feature.journaling.presentation.JournalViewModel
+import com.l5.calmius.ui.theme.Blue75
+import com.l5.calmius.ui.theme.Typography
 
 @Composable
 fun JournalListItem(
@@ -33,6 +35,7 @@ fun JournalListItem(
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp)),
         elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(containerColor = Blue75),
         onClick = {
             navController.navigate("journalDetail/${journal.id}")
         }
@@ -47,7 +50,7 @@ fun JournalListItem(
             )
             Text(
                 text = journal.date,
-                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Light),
+                style = Typography.bodySmall,
                 modifier = Modifier.fillMaxWidth()
             )
             AsyncImage(
@@ -63,7 +66,8 @@ fun JournalListItem(
                 text = journal.story,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                style = Typography.bodyMedium
             )
         }
     }

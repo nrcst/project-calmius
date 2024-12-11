@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface JournalDao {
@@ -18,7 +19,7 @@ interface JournalDao {
     suspend fun deleteJournal(journal: JournalEntity)
 
     @Query("SELECT * FROM journals")
-    fun getAllJournals(): List<JournalEntity>
+    fun getAllJournals(): Flow<List<JournalEntity>>
 
     @Query("SELECT * FROM journals WHERE id = :journalId")
     fun getJournalById(journalId: Long): JournalEntity

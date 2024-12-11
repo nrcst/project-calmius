@@ -1,7 +1,9 @@
 package com.l5.calmius.feature.journaling.data
 
+import kotlinx.coroutines.flow.Flow
+
 class JournalRepository(private val journalDao: JournalDao) {
-    suspend fun getAllJournals(): List<JournalEntity> {
+    fun getAllJournals(): Flow<List<JournalEntity>> {
         return journalDao.getAllJournals()
     }
 

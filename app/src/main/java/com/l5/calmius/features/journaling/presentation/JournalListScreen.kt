@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.l5.calmius.feature.journaling.data.JournalEntity
 import com.l5.calmius.features.journaling.presentation.JournalListItem
+import com.l5.calmius.ui.theme.Typography
 
 @Composable
 fun JournalListScreen(
@@ -50,12 +51,12 @@ fun JournalListScreen(
             .padding(16.dp)) {
             Text(
                 text = "My Journal",
-                style = MaterialTheme.typography.displayLarge,
+                style = Typography.displayMedium,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             Text(
                 text = "Everydays is part of your life",
-                style = MaterialTheme.typography.bodyLarge,
+                style = Typography.displayMedium,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             LazyColumn(modifier = modifier) {
