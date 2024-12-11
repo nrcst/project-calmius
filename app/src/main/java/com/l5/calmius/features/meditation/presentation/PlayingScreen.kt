@@ -15,54 +15,54 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun PlayingScreen(track: MeditationTrack, onDone: () -> Unit) {
+fun PlayingScreen(track: MeditationTrack, onFinished: () -> Unit) {
     val context = LocalContext.current
-    var mediaPlayer: MediaPlayer? by remember { mutableStateOf(null) }
-    var isPlaying by remember { mutableStateOf(false) }
-    var currentPosition by remember { mutableStateOf(0f) }
-    val scope = rememberCoroutineScope()
+    var mediaPlayer by remember { mutableStateOf<MediaPlayer?>(null) }
+    var isPlaying by remember { mutableStateOf(true) }
 
     DisposableEffect(Unit) {
-        mediaPlayer = MediaPlayer.create(context, context.resources.getIdentifier(track.audioPath, "raw", context.packageName))
+        mediaPlayer = MediaPlayer.create(context, track.resourceId)
+        mediaPlayer?.start()
+
         mediaPlayer?.setOnCompletionListener {
-            onDone()
+            onFinished()
         }
+
         onDispose {
             mediaPlayer?.release()
+            mediaPlayer = null
         }
     }
 
-    LaunchedEffect(isPlaying) {
-        if (isPlaying) {
-            mediaPlayer?.start()
-            while (isPlaying && mediaPlayer?.isPlaying == true) {
-                currentPosition = mediaPlayer?.currentPosition?.toFloat() ?: 0f
-                delay(1000L)
-            }
-        } else {
-            mediaPlayer?.pause()
-        }
-    }
-
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text(text = track.title, style = MaterialTheme.typography.headlineSmall)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(text = track.title, style = MaterialTheme.typography.headlineMedium)
+        Spacer(modifier = Modifier.height(16.dp))
         Text(text = track.description, style = MaterialTheme.typography.bodyMedium)
-        Slider(
-            value = currentPosition,
-            onValueChange = { newPosition ->
-                mediaPlayer?.seekTo(newPosition.toInt())
-                currentPosition = newPosition
-            },
-            valueRange = 0f..(mediaPlayer?.duration?.toFloat() ?: 0f),
-            modifier = Modifier.fillMaxWidth()
-        )
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Button(onClick = { isPlaying = !isPlaying }) {
-                Text(text = if (isPlaying) "Pause" else "Resume")
+        Spacer(modifier = Modifier.height(32.dp))
+
+        Button(onClick = {
+            if (isPlaying) {
+                mediaPlayer?.pause()
+            } else {
+                mediaPlayer?.start()
             }
-            Button(onClick = { onDone() }) {
-                Text(text = "Done")
-            }
+            isPlaying = !isPlaying
+        }) {
+            Text(text = if (isPlaying) "Pause" else "Play")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = {
+            mediaPlayer?.stop()
+            onFinished()
+        }) {
+            Text(text = "Stop")
         }
     }
 }

@@ -11,7 +11,7 @@ data class MeditationTrack(
     val description: String,
     val duration: Int,
     val meditationType: MeditationType,
-    val audioPath: String
+    val resourceId: Int,
 )
 
 class Converters {
