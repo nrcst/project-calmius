@@ -1,5 +1,6 @@
 package com.l5.calmius.Navigation
 
+import com.l5.calmius.features.meditation.presentation.MeditationScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,8 +13,22 @@ import com.l5.calmius.feature.journaling.presentation.JournalDetailScreen
 import com.l5.calmius.feature.journaling.presentation.JournalEditScreen
 
 @Composable
-fun AppNavHost(navController: NavHostController, journalViewModel: JournalViewModel, modifier: Modifier) {
-    NavHost(navController = navController, startDestination = "JournalList") {
+fun AppNavHost(
+    navController: NavHostController,
+    journalViewModel: JournalViewModel,
+    modifier: Modifier = Modifier
+) {
+    NavHost(
+        navController = navController,
+        startDestination = Screen.Meditation.route,
+        modifier = modifier
+    ) {
+        composable(Screen.Meditation.route) {
+            MeditationScreen()
+        }
+        composable("JournalList") {
+            JournalListScreen(navController, modifier, journalViewModel)
+        }
         composable("JournalList") {
             JournalListScreen(navController, modifier, journalViewModel)
         }
