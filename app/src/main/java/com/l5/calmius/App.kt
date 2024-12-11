@@ -36,13 +36,13 @@ class MainActivity : ComponentActivity() {
                 }
 
                 val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-                // val meditationDatabase = DatabaseProvider.getDatabase(context, applicationScope)
+                val meditationDatabase = DatabaseProvider.getDatabase(context, applicationScope)
 
-                // LaunchedEffect(Unit) {
-                //    applicationScope.launch {
-                //        populateDatabase(meditationDatabase.meditationTrackDao())
-                //    }
-                // }
+                LaunchedEffect(Unit) {
+                    applicationScope.launch {
+                        populateDatabase(meditationDatabase.meditationTrackDao())
+                    }
+                }
 
                 MainScreen(journalViewModel = journalViewModel)
             }
