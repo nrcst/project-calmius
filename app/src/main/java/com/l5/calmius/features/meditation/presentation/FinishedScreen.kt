@@ -69,7 +69,7 @@ fun FinishedScreen(onReturnHome: () -> Unit) {
                     .padding(top = 16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Blue400)
             ) {
-                Text(text = "Start Listening", fontSize = 15.sp)
+                Text(text = "Return to Home", fontSize = 15.sp)
             }
 
             Spacer(modifier = Modifier.height(24.dp))
