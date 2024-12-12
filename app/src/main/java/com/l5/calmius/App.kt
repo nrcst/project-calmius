@@ -39,11 +39,11 @@ class MainActivity : ComponentActivity() {
                 val meditationDatabase = DatabaseProvider.getDatabase(context, applicationScope)
 
                 // Uncomment to populate meditation records on first time up build
-//                LaunchedEffect(Unit) {
-//                    applicationScope.launch {
-//                        populateDatabase(meditationDatabase.meditationTrackDao())
-//                    }
-//                }
+                LaunchedEffect(Unit) {
+                    applicationScope.launch {
+                        populateDatabase(meditationDatabase.meditationTrackDao())
+                    }
+                }
 
                 MainScreen(journalViewModel = journalViewModel)
             }
