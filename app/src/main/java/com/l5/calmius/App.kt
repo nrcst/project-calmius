@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
                 }
 
                 val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-                val meditationDatabase = DatabaseProvider.getDatabase(context, applicationScope)
+//                val meditationDatabase = DatabaseProvider.getDatabase(context, applicationScope)
 
                 // Uncomment to populate meditation records on first time up build
 //                LaunchedEffect(Unit) {

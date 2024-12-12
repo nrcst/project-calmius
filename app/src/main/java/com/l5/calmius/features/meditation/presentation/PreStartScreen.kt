@@ -1,6 +1,8 @@
 package com.l5.calmius.features.meditation.presentation
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -27,12 +29,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.l5.calmius.features.meditation.data.MeditationTrack
 import com.l5.calmius.ui.theme.MeditationColors
 import com.l5.calmius.R
+import com.l5.calmius.ui.theme.Blue400
 import okhttp3.internal.wait
+import java.time.format.TextStyle
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,7 +82,7 @@ fun PreStartScreen(
                     painter = painterResource(id = R.drawable.meditation_asset1),
                     contentDescription = "Meditation Illustration",
                     modifier = Modifier
-                        .size(350.dp)
+                        .size(340.dp)
                         .padding(16.dp)
                 )
 
@@ -91,33 +97,53 @@ fun PreStartScreen(
                     shape = RoundedCornerShape(0.dp)
                 ) {
                     Column(
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(20.dp),
+                        verticalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(
-                            text = track.title,
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                        Text(
-                            text = track.description,
-                            style = MaterialTheme.typography.bodyMedium.copy(
-                                color = Color.Gray
-                            ),
-                            modifier = Modifier.padding(top = 8.dp)
-                        )
-                        Text(
-                            text = "Duration: ${track.duration} minutes",
-                            style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.padding(top = 8.dp)
-                        )
+                        Column {
+                            Text(
+                                text = track.title,
+                                fontSize = 20.sp,
+                                modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
+                            )
+                            Text(
+                                text = track.description,
+                                style = MaterialTheme.typography.bodyMedium.copy(
+                                    color = Color.Gray
+                                ),
+                                fontSize = 16.sp,
+                                modifier = Modifier.padding(top = 8.dp)
+                            )
+                            Spacer(modifier = Modifier.height(21.dp))
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.clock),
+                                    contentDescription = "Meditation Illustration",
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Text(
+                                    text = " ${track.duration} minutes",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    modifier = Modifier.padding(start = 8.dp)
+                                )
+                            }
+                        }
 
                         Button(
                             onClick = onStartListening,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(bottom = 16.dp)
+                                .padding(top = 16.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = Blue400)
                         ) {
-                            Text(text = "Start Listening")
+                            Text(text = "Start Listening", fontSize = 15.sp)
                         }
+
                     }
                 }
             }

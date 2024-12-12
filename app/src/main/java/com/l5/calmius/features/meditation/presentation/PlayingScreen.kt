@@ -64,7 +64,7 @@ fun PlayingScreen(track: MeditationTrack, onFinished: () -> Unit, onBack: () -> 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = track.title) },
+                title = { Text(text = "") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
@@ -84,7 +84,6 @@ fun PlayingScreen(track: MeditationTrack, onFinished: () -> Unit, onBack: () -> 
                 .padding(16.dp),
             verticalArrangement = Arrangement.Center
         ) {
-            Text(text = track.description, style = MaterialTheme.typography.bodyMedium)
             Spacer(modifier = Modifier.height(32.dp))
 
             Row(
