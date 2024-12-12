@@ -15,7 +15,6 @@ import com.l5.calmius.feature.journaling.presentation.JournalAddScreen
 import com.l5.calmius.feature.journaling.presentation.JournalListScreen
 import com.l5.calmius.feature.journaling.presentation.JournalViewModel
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.platform.LocalContext
 import com.l5.calmius.feature.journaling.presentation.JournalDetailScreen
 import com.l5.calmius.feature.journaling.presentation.JournalEditScreen
@@ -29,13 +28,19 @@ import com.l5.calmius.features.meditation.ui.PlayingScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import com.l5.calmius.Navigation.*
-
+import com.l5.calmius.features.community.presentation.CommunityScreen
+import com.l5.calmius.features.community.presentation.CommunityViewModel
+import com.l5.calmius.features.community.presentation.SearchBarAndHistoryScreen
+import com.l5.calmius.features.community.presentation.SearchScreen
+import com.l5.calmius.features.community.presentation.CreatePostScreen
+import com.l5.calmius.features.community.presentation.DetailPostScreen
+import com.l5.calmius.features.community.presentation.PostCommentScreen
 
 @Composable
 fun AppNavHost(
     navController: NavHostController,
     journalViewModel: JournalViewModel,
+    communityViewModel: CommunityViewModel,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -54,7 +59,7 @@ fun AppNavHost(
             MeditationTrackListScreen(
                 type = type,
                 onTrackSelected = { track ->
-                    navController.navigate("preStart/${track.id}")
+                navController.navigate("preStart/${track.id}")
                 },
                 onBack = { navController.popBackStack() }
             )
@@ -76,7 +81,7 @@ fun AppNavHost(
                 PreStartScreen(
                     track = it,
                     onStartListening = {
-                        navController.navigate("playing/${it.id}")
+                    navController.navigate("playing/${it.id}")
                     },
                     onBack = { navController.popBackStack() }
                 )
@@ -127,6 +132,31 @@ fun AppNavHost(
         composable("JournalEdit/{journalId}") { backStackEntry ->
             val journalId = backStackEntry.arguments?.getString("journalId")?.toLong() ?: 0L
             JournalEditScreen(navController, journalId, modifier, journalViewModel)
+        }
+
+        composable(NavigationDestination.Community.route) {
+            CommunityScreen(navController, viewModel = communityViewModel)
+        }
+
+        composable("searchBarAndHistory") {
+            SearchBarAndHistoryScreen(navController, viewModel = communityViewModel)
+        }
+
+        // Community
+        composable("searchScreen/{query}") { backStackEntry ->
+            val query = backStackEntry.arguments?.getString("query") ?: ""
+            SearchScreen(query = query, navController = navController, viewModel = communityViewModel)
+        }
+        composable("createPost") {
+            CreatePostScreen(navController = navController, viewModel = communityViewModel)
+        }
+        composable("detailPost/{postId}") { backStackEntry ->
+            val postId = backStackEntry.arguments?.getString("postId") ?: ""
+            DetailPostScreen(postId = postId, navController = navController, viewModel = communityViewModel)
+        }
+        composable("postComment/{postId}") { backStackEntry ->
+            val postId = backStackEntry.arguments?.getString("postId") ?: ""
+            PostCommentScreen(postId = postId, navController = navController, viewModel = communityViewModel)
         }
     }
 }
