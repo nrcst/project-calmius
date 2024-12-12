@@ -2,9 +2,11 @@ package com.l5.calmius.features.meditation.ui
 
 import android.annotation.SuppressLint
 import android.media.MediaPlayer
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
@@ -17,11 +19,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.l5.calmius.R
 import com.l5.calmius.features.meditation.data.MeditationTrack
+import com.l5.calmius.ui.theme.Blue400
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.l5.calmius.ui.theme.MeditationColors
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,6 +41,7 @@ fun PlayingScreen(track: MeditationTrack, onFinished: () -> Unit, onBack: () -> 
     var isPlaying by remember { mutableStateOf(true) }
     var currentPosition by remember { mutableStateOf(0) }
     val duration = track.durationMillis
+    val backgroundColor = MeditationColors.getColorByType(track.meditationType)
 
     DisposableEffect(Unit) {
         mediaPlayer = MediaPlayer.create(context, track.resourceId).apply {
@@ -64,73 +74,154 @@ fun PlayingScreen(track: MeditationTrack, onFinished: () -> Unit, onBack: () -> 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = track.title) },
+                title = { Text(text = "") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
                 actions = {
-                    IconButton(onClick = onFinished) {
-                        Text(text = "Done")
+                    Button(
+                        onClick = onFinished,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.White
+                        ),
+                        modifier = Modifier
+                            .padding(end = 10.dp)
+                            .graphicsLayer(
+
+                            ),
+                        shape = RoundedCornerShape(20.dp)
+                    ) {
+                        Text(
+                            text = "Done",
+                            color = Color.Black,
+                            style = MaterialTheme.typography.labelLarge
+                        )
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = backgroundColor)
             )
         },
-    ) {
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center
+                .padding(paddingValues)
+                .background(backgroundColor),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = track.description, style = MaterialTheme.typography.bodyMedium)
-            Spacer(modifier = Modifier.height(32.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = formatTime(currentPosition), style = MaterialTheme.typography.bodyMedium)
-                Text(text = "-${formatTime(duration - currentPosition)}", style = MaterialTheme.typography.bodyMedium)
-            }
+                Image(
+                    painter = painterResource(id = R.drawable.meditation_asset1),
+                    contentDescription = "Meditation Illustration",
+                    modifier = Modifier
+                        .size(340.dp)
+                        .padding(16.dp)
+                )
 
-            Slider(
-                value = currentPosition.toFloat(),
-                onValueChange = { newPosition ->
-                    mediaPlayer?.seekTo(newPosition.toInt())
-                    currentPosition = newPosition.toInt()
-                },
-                valueRange = 0f..duration.toFloat()
-            )
+                Spacer(modifier = Modifier.height(155.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .padding(vertical = 1.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    shape = RoundedCornerShape(0.dp)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(20.dp),
+                    ) {
+                        Column {
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Spacer(modifier = Modifier.weight(1f))
+                            Text(
+                                text = track.title,
+                                fontSize = 20.sp,
+                                modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
+                            )
 
-                Button(onClick = {
-                    if (isPlaying) {
-                        mediaPlayer?.pause()
-                    } else {
-                        mediaPlayer?.start()
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(text = formatTime(currentPosition), style = MaterialTheme.typography.bodyMedium)
+                                Text(text = "-${formatTime(duration - currentPosition)}", style = MaterialTheme.typography.bodyMedium)
+                            }
+
+                            Slider(
+                                value = currentPosition.toFloat(),
+                                onValueChange = { newPosition ->
+                                    mediaPlayer?.seekTo(newPosition.toInt())
+                                    currentPosition = newPosition.toInt()
+                                },
+                                valueRange = 0f..duration.toFloat(),
+                                colors = SliderDefaults.colors(
+                                    thumbColor = Color.Black,
+                                    activeTrackColor = Color.Black,
+                                    inactiveTrackColor = Color(0xFFF1EDE9)
+                                )
+                            )
+
+
+                            Spacer(modifier = Modifier.height(1.dp))
+                        }
+
+                        Column {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Spacer(modifier = Modifier.width(80.dp))
+
+                                IconButton(
+                                    onClick = {
+                                        if (isPlaying) {
+                                            mediaPlayer?.pause()
+                                        } else {
+                                            mediaPlayer?.start()
+                                        }
+                                        isPlaying = !isPlaying
+                                    },
+                                    modifier = Modifier.size(92.dp)
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = if (isPlaying) R.drawable.pause_circle else R.drawable.play_circle),
+                                        contentDescription = if (isPlaying) "Pause" else "Play",
+                                        modifier = Modifier.size(74.dp),
+                                        tint = Blue400
+                                    )
+                                }
+
+
+                                Spacer(modifier = Modifier.width(22.dp))
+
+
+                                IconButton(
+                                    onClick = {
+                                        mediaPlayer?.seekTo((mediaPlayer?.currentPosition ?: 0) + 10000)
+                                    }
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.forward_10),
+                                        contentDescription = "Forward 10 seconds",
+                                        modifier = Modifier.size(48.dp),
+                                        tint = Blue400
+                                    )
+                                }
+                            }
+                        }
                     }
-                    isPlaying = !isPlaying
-                }) {
-                    Text(text = if (isPlaying) "Pause" else "Play")
-                }
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                Button(onClick = {
-                    mediaPlayer?.seekTo((mediaPlayer?.currentPosition ?: 0) + 15000)
-                }) {
-                    Text(text = "Forward 15 seconds")
                 }
             }
+
         }
     }
 }
