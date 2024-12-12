@@ -92,7 +92,7 @@ fun PreStartScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxHeight()
-                        .padding(vertical = 16.dp),
+                        ,
                     colors = CardDefaults.cardColors(containerColor = Color.White),
                     shape = RoundedCornerShape(0.dp)
                 ) {
@@ -143,7 +143,6 @@ fun PreStartScreen(
                         ) {
                             Text(text = "Start Listening", fontSize = 15.sp)
                         }
-
                     }
                 }
             }
