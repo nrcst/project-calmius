@@ -28,12 +28,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
-        
+
         val auth = FirebaseAuth.getInstance()
-        
+
         if (auth.currentUser == null) {
             // manual signing buat testing
-            auth.signInWithEmailAndPassword("user@example.com", "password")
+            auth.signInWithEmailAndPassword("test@user.com", "123456")
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         setContent {
@@ -74,11 +74,9 @@ class MainActivity : ComponentActivity() {
                     }
 
                     val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-                    val meditationDatabase = DatabaseProvider.getDatabase(context, applicationScope)
-                    val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 //                val meditationDatabase = DatabaseProvider.getDatabase(context, applicationScope)
 
-                // Uncomment to populate meditation records on first time up build
+                    // Uncomment to populate meditation records on first time up build
 //                LaunchedEffect(Unit) {
 //                    applicationScope.launch {
 //                        populateDatabase(meditationDatabase.meditationTrackDao())

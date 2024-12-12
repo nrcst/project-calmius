@@ -1,3 +1,4 @@
+
 package com.l5.calmius.Navigation
 
 import androidx.compose.foundation.layout.padding
@@ -15,11 +16,13 @@ import com.l5.calmius.features.community.presentation.CommunityViewModel
 import com.l5.calmius.features.community.data.FirebaseRepository
 
 @Composable
-fun MainScreen(journalViewModel: JournalViewModel) {
+fun MainScreen(
+    journalViewModel: JournalViewModel,
+    communityViewModel: CommunityViewModel
+) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    val communityViewModel: CommunityViewModel = viewModel()
 
     val showBottomBar = currentDestination?.route in listOf(
         "home", "meditation", "community", "journal", "profile"
