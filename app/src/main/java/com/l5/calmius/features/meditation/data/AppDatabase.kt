@@ -51,7 +51,8 @@ abstract class AppDatabase : RoomDatabase() {
 
 suspend fun populateDatabase(dao: MeditationTrackDao) {
     val tracks = listOf(
-        MeditationTrack(title = "Relaxing Mood", description = "Relaxing music for mood", duration = 5, meditationType = MeditationType.MOOD, resourceId = R.raw.mood01),
+        MeditationTrack(title = "Relaxing Mood", brief = "this is brief", description = "Relaxing music for mood desc", duration = 5, durationMillis = (5 * 60 + 9) * 1000, meditationType = MeditationType.MOOD, resourceId = R.raw.mood01),
+        MeditationTrack(title = "Relaxing 2", brief = "this is brief", description = "Relaxing music for mood desc", duration = 5, durationMillis = (5 * 60 + 0) * 1000, meditationType = MeditationType.ENERGIC, resourceId = R.raw.mood04),
     )
     dao.insertTrack(tracks)
 }
