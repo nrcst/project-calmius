@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp") version "2.0.0-1.0.22"
-    id("com.google.devtools.ksp")
     alias(libs.plugins.google.gms.google.services)
 
 }
