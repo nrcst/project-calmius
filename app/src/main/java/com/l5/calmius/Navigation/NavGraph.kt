@@ -51,9 +51,13 @@ fun AppNavHost(
         }
         composable("meditationTrackList/{type}") { backStackEntry ->
             val type = MeditationType.valueOf(backStackEntry.arguments?.getString("type") ?: "")
-            MeditationTrackListScreen(type) { track ->
-                navController.navigate("preStart/${track.id}")
-            }
+            MeditationTrackListScreen(
+                type = type,
+                onTrackSelected = { track ->
+                    navController.navigate("preStart/${track.id}")
+                },
+                onBack = { navController.popBackStack() }
+            )
         }
         composable("preStart/{trackId}") { backStackEntry ->
             val trackId = backStackEntry.arguments?.getString("trackId")?.toInt() ?: 0
@@ -69,9 +73,13 @@ fun AppNavHost(
             }
 
             track?.let {
-                PreStartScreen(track = it) {
-                    navController.navigate("playing/${it.id}")
-                }
+                PreStartScreen(
+                    track = it,
+                    onStartListening = {
+                        navController.navigate("playing/${it.id}")
+                    },
+                    onBack = { navController.popBackStack() }
+                )
             }
         }
         composable("playing/{trackId}") { backStackEntry ->
@@ -88,9 +96,11 @@ fun AppNavHost(
             }
 
             track?.let {
-                PlayingScreen(track = it) {
+                PlayingScreen(track = it, onFinished = {
                     navController.navigate("finished")
-                }
+                }, onBack = {
+                    navController.popBackStack()
+                })
             }
         }
         composable("finished") {
@@ -112,11 +122,11 @@ fun AppNavHost(
         }
         composable("JournalDetail/{journalId}") { backStackEntry ->
             val journalId = backStackEntry.arguments?.getString("journalId")?.toLong() ?: 0L
-            JournalDetailScreen(navController, journalId,modifier)
+            JournalDetailScreen(navController, journalId, modifier)
         }
         composable("JournalEdit/{journalId}") { backStackEntry ->
             val journalId = backStackEntry.arguments?.getString("journalId")?.toLong() ?: 0L
-            JournalEditScreen(navController, journalId,modifier, journalViewModel)
+            JournalEditScreen(navController, journalId, modifier, journalViewModel)
         }
     }
 }
