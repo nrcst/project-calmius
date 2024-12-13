@@ -9,12 +9,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 open class CommunityViewModel() : ViewModel() {
     private val repository: FirebaseRepository = FirebaseRepository()
 
-    // initialize users collection to ensure user data exists
     init {
         repository.initializeUsersCollection()
     }
@@ -24,6 +25,27 @@ open class CommunityViewModel() : ViewModel() {
 
     open val searchHistory: StateFlow<List<String>> = repository.getSearchHistory()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+    private val _sortType = MutableStateFlow(SortType.RECENT)
+    val sortType: StateFlow<SortType> = _sortType
+
+    fun setSortType(sortType: SortType) {
+        _sortType.value = sortType
+    }
+
+    fun getSortedPosts(): Flow<List<Post>> {
+        return posts.map { postList ->
+            when (_sortType.value) {
+                SortType.RECENT -> postList.sortedByDescending { it.timestamp }
+                SortType.LIKES -> postList.sortedByDescending { it.likes.size }
+                SortType.MY_POSTS -> postList.filter { it.userId == getCurrentUserId() }
+            }
+        }
+    }
+
+    enum class SortType {
+        RECENT, LIKES, MY_POSTS
+    }
 
     fun createPost(title: String, content: String) {
         viewModelScope.launch {
@@ -76,5 +98,9 @@ open class CommunityViewModel() : ViewModel() {
 
     fun getComments(postId: String): Flow<List<Comment>> {
         return repository.getComments(postId)
+    }
+
+    fun getCurrentUserId(): String? {
+        return repository.getCurrentUserId()
     }
 }
