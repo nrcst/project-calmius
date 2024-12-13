@@ -1,5 +1,7 @@
 package com.l5.calmius.feature.journaling.presentation
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,18 +20,23 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
@@ -37,6 +44,7 @@ import com.l5.calmius.feature.journaling.presentation.JournalViewModel
 import com.l5.calmius.feature.journaling.data.JournalEntity
 import com.l5.calmius.feature.journaling.data.JournalRepository
 import com.l5.calmius.features.journaling.data.JournalDatabase
+import com.l5.calmius.ui.theme.Typography
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -63,63 +71,88 @@ fun JournalDetailScreen(
         dateFormat.format(SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(it)!!)
     } ?: "Unknown Date"
 
+    val expanded = remember { mutableStateOf(false) }
+
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    navController.navigate("JournalEdit/${journalId}")
-                },
-                shape = CircleShape,
-                containerColor = Color.Gray,
-                contentColor = Color.White,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .size(56.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = "Edit"
-                )
+            Box {
+                FloatingActionButton(
+                    onClick = { expanded.value = true },
+                    shape = CircleShape,
+                    containerColor = Color.Gray,
+                    contentColor = Color.White,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .size(56.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = "Edit"
+                    )
+                }
+                DropdownMenu(
+                    expanded = expanded.value,
+                    onDismissRequest = { expanded.value = false },
+                    Modifier.background(color = Color.Transparent)
+                ) {
+                    DropdownMenuItem(
+                        text = { Text("Edit") },
+                        onClick = {
+                            expanded.value = false
+                            navController.navigate("JournalEdit/${journalId}")
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text("Delete") },
+                        onClick = {
+                            expanded.value = false
+                            journal?.let {
+                                journalViewModel.deleteJournal(it)
+                                navController.popBackStack()
+                            }
+                        }
+                    )
+                }
             }
         }
     ) { innerPadding ->
         Column(
             modifier = modifier
-                .padding(innerPadding)
+                .padding(innerPadding) // Apply innerPadding here
                 .padding(16.dp)
+                .fillMaxHeight() // Ensure the column fills the available height
         ) {
             Row {
-                Button(
-                    onClick = {
-                        navController.popBackStack()
-                    },
-                    shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Gray,
-                        contentColor = Color.Black
-                    ),
+                Box(
                     modifier = Modifier
-                        .padding(8.dp)
-                        .size(50.dp) // Set the size to make it circular
+                        .size(50.dp)
+                        .background(Color(0xFFF8FAFC), CircleShape)
+                        .clickable { navController.popBackStack() },
+                    contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = "Back",
-                        tint = Color.White
+                        tint = Color.Black,
+                        modifier = Modifier.size(20.dp).align(Alignment.Center)
                     )
                 }
+
+                Text(
+                    text = journal?.title ?: "No Title",
+                    style = Typography.displayLarge,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(start = 16.dp)
+                )
             }
 
-            Text(
-                text = journal?.title ?: "No Title",
-                style = MaterialTheme.typography.displayLarge,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
+            Spacer(modifier = Modifier.height(16.dp))
+
             Text(
                 text = formattedDate,
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 16.dp)
+                style = Typography.bodyLarge,
+                fontWeight = Typography.bodySmall.fontWeight,
+                modifier = Modifier.padding(bottom = 16.dp, start = 16.dp)
             )
             AsyncImage(
                 model = journal?.imageUrl,
@@ -129,22 +162,43 @@ fun JournalDetailScreen(
                     .height(200.dp)
                     .padding(bottom = 16.dp)
             )
-            Box() {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
                 Column {
-                    Text(text = "Today Stories", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
+                    Text(
+                        text = "Today Stories",
+                        style = Typography.bodyLarge,
+                        fontWeight = Typography.bodyLarge.fontWeight,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = journal?.story ?: "No Story",
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(bottom = 16.dp)
+                        style = Typography.bodyLarge,
+                        fontWeight = Typography.bodySmall.fontWeight,
+                        modifier = Modifier.padding(bottom = 16.dp),
+                        textAlign = TextAlign.Justify
                     )
                 }
             }
-            Box() {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
                 Column {
-                    Text(text = "Gratitude", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
+                    Text(
+                        text = "Gratitude",
+                        style = Typography.bodyLarge,
+                        fontWeight = Typography.bodyLarge.fontWeight
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = journal?.gratitude ?: "No Gratitude",
-                        style = MaterialTheme.typography.bodyMedium
+                        style = Typography.bodyLarge,
+                        fontWeight = Typography.bodySmall.fontWeight,
                     )
                 }
             }

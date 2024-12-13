@@ -2,12 +2,15 @@ package com.l5.calmius.feature.journaling.presentation
 
 import android.net.Uri
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -20,10 +23,13 @@ import com.l5.calmius.feature.journaling.data.JournalEntity
 import com.l5.calmius.feature.journaling.data.JournalRepository
 import com.l5.calmius.features.journaling.data.JournalDatabase
 import com.l5.calmius.ui.theme.Blue400
+import com.l5.calmius.ui.theme.Blue75
+import com.l5.calmius.ui.theme.Typography
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JournalEditScreen(
     navController: NavController,
@@ -70,29 +76,31 @@ fun JournalEditScreen(
     }
 
     Column(
-        modifier = modifier.padding(16.dp),
+        modifier = modifier.padding(start = 46.dp, end = 46.dp, top = 26.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Row {
-            Button(
-                onClick = { showDialog.value = true },
-                shape = CircleShape,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Gray,
-                    contentColor = Color.Black
-                ),
-                modifier = Modifier.padding(8.dp).size(50.dp)
+            Box(
+                modifier = Modifier
+                    .size(50.dp)
+                    .background(Color(0xFFF8FAFC), CircleShape)
+                    .clickable { showDialog.value = true },
+                contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Back",
-                    tint = Color.White
+                    tint = Color.Black,
+                    modifier = Modifier.size(20.dp).align(Alignment.Center)
                 )
             }
+
+            Spacer(modifier = Modifier.width(26.dp))
+
             Text(
                 text = "Edit Your Stories",
-                fontSize = 40.sp,
-                fontWeight = FontWeight.Bold,
+                style = Typography.displayLarge,
+                fontWeight = Typography.displayMedium.fontWeight,
                 modifier = Modifier.fillMaxWidth().padding(start = 16.dp)
             )
         }
@@ -102,11 +110,38 @@ fun JournalEditScreen(
             onSetUri = { uri -> imageUrl = uri.toString() }
         )
 
-        CustomTextField(
-            value = title,
-            onValueChange = { title = it },
-            label = "Title"
-        )
+//        CustomTextField(
+//            value = title,
+//            onValueChange = { title = it },
+//            label = "Title"
+//        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(100.dp)
+                .background(Blue75, RoundedCornerShape(15.dp))
+                .padding(16.dp)
+        ) {
+            TextField(
+                value = title,
+                onValueChange = {
+                    title = it
+                },
+                modifier = Modifier.fillMaxWidth(),
+                maxLines = 1,
+                placeholder = {
+                    Text(text = "Title",
+                        color = Color.Black,
+                        style = Typography.bodyMedium)
+                },
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                )
+            )
+        }
 
         CustomTextField(
             value = story,
@@ -133,9 +168,11 @@ fun JournalEditScreen(
                 Button(
                     onClick = {
                         journalViewModel.deleteJournal(journal)
-                        navController.navigate("JournalList")
+                        navController.navigate("journal")
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = Blue400)
+                    modifier = Modifier.width(100.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Blue400),
+
                 ) { Text("Delete") }
             }
 
@@ -154,8 +191,9 @@ fun JournalEditScreen(
                         imageUrl = imageUrl
                     )
                     journalViewModel.saveJournal(updatedJournal)
-                    navController.navigate("JournalList")
+                    navController.navigate("journal")
                 },
+                modifier = Modifier.width(100.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Blue400)
             ) { Text("Submit") }
         }
