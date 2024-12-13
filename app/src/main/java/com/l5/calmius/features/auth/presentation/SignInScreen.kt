@@ -58,8 +58,8 @@ fun SignInScreen(
     LaunchedEffect(authState.value) {
         when (authState.value) {
             is AuthState.Authenticated -> {
-                navController.navigate("profile") {
-                    popUpTo("signin") { inclusive = true }
+                navController.navigate("home") {
+                    popUpTo("signIn") { inclusive = true }
                 }
             }
             else -> {}
