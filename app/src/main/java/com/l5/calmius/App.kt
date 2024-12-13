@@ -21,30 +21,70 @@ import kotlinx.coroutines.SupervisorJob
 import com.l5.calmius.features.meditation.data.DatabaseProvider
 import com.l5.calmius.features.meditation.data.populateDatabase
 import kotlinx.coroutines.launch
+import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            CalmiusTheme {
-                val context = LocalContext.current
-                val journalRepository = JournalRepository(
-                    journalDao = JournalDatabase.getDatabase(context).journalDao()
-                )
-                val journalViewModel: JournalViewModel by viewModels {
-                    JournalViewModelFactory(journalRepository)
+        FirebaseApp.initializeApp(this)
+
+        val auth = FirebaseAuth.getInstance()
+
+        if (auth.currentUser == null) {
+            // manual signing buat testing
+            auth.signInWithEmailAndPassword("test@user.com", "123456")
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        setContent {
+                            CalmiusTheme {
+                                val context = LocalContext.current
+                                val journalRepository = JournalRepository(
+                                    journalDao = JournalDatabase.getDatabase(context).journalDao()
+                                )
+                                val journalViewModel: JournalViewModel by viewModels {
+                                    JournalViewModelFactory(journalRepository)
+                                }
+
+                                val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+                                val meditationDatabase = DatabaseProvider.getDatabase(context, applicationScope)
+
+                                LaunchedEffect(Unit) {
+                                    applicationScope.launch {
+                                        populateDatabase(meditationDatabase.meditationTrackDao())
+                                    }
+                                }
+
+                                MainScreen(journalViewModel = journalViewModel)
+                            }
+                        }
+                    } else {
+                        // handle authentication failure
+                    }
                 }
+        } else {
+            setContent {
+                CalmiusTheme {
+                    val context = LocalContext.current
+                    val journalRepository = JournalRepository(
+                        journalDao = JournalDatabase.getDatabase(context).journalDao()
+                    )
+                    val journalViewModel: JournalViewModel by viewModels {
+                        JournalViewModelFactory(journalRepository)
+                    }
 
-                val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-                // val meditationDatabase = DatabaseProvider.getDatabase(context, applicationScope)
+                    val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+//                val meditationDatabase = DatabaseProvider.getDatabase(context, applicationScope)
 
-                // LaunchedEffect(Unit) {
-                //    applicationScope.launch {
-                //        populateDatabase(meditationDatabase.meditationTrackDao())
-                //    }
-                // }
+                    // Uncomment to populate meditation records on first time up build
+//                LaunchedEffect(Unit) {
+//                    applicationScope.launch {
+//                        populateDatabase(meditationDatabase.meditationTrackDao())
+//                    }
+//                }
 
-                MainScreen(journalViewModel = journalViewModel)
+                    MainScreen(journalViewModel = journalViewModel)
+                }
             }
         }
     }

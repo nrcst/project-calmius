@@ -1,6 +1,7 @@
 package com.l5.calmius.ui.theme
 
 import androidx.compose.ui.graphics.Color
+import com.l5.calmius.features.meditation.data.MeditationType
 
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)
@@ -17,3 +18,19 @@ val Blue200 = Color(0xFFB4DFFF)
 val Blue300 = Color(0xFFA5D8FF)
 val Blue400 = Color(0xFF7397B3)
 val Blue500 = Color(0xFF65849C)
+
+object MeditationColors {
+    val Mood = Color(0xFFDDF0E7)
+    val Calm = Color(0xFFE9F1FC)
+    val Memories = Color(0xFFE7DDF0)
+    val Energic = Color(0xFFF0EEDD)
+
+    fun getColorByType(type: MeditationType): Color {
+        return when (type) {
+            MeditationType.MOOD -> Mood
+            MeditationType.CALM -> Calm
+            MeditationType.MEMORIES -> Memories
+            MeditationType.ENERGIC -> Energic
+        }
+    }
+}

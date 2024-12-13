@@ -14,4 +14,5 @@ sealed class NavigationDestination(val route: String, val icon: ImageVector) {
     object Community : NavigationDestination("community", Icons.Default.Search)
     object Journal : NavigationDestination("journal", Icons.Default.Edit)
     object Profile : NavigationDestination("profile", Icons.Default.AccountCircle)
+       object SearchBarAndHistory : NavigationDestination("searchBarAndHistory", Icons.Default.Search)
 }

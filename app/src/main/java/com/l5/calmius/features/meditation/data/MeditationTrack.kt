@@ -8,10 +8,12 @@ import androidx.room.TypeConverter
 data class MeditationTrack(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val title: String,
+    val brief: String,
     val description: String,
     val duration: Int,
+    val durationMillis: Int,
     val meditationType: MeditationType,
-    val audioPath: String
+    val resourceId: Int,
 )
 
 class Converters {
