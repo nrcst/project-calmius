@@ -37,7 +37,6 @@ fun DetailPostScreen(postId: String, navController: NavController, viewModel: Co
     var commentLimit by remember { mutableStateOf(3) }
     val currentUser = viewModel.getCurrentUserId()
     var isLiked by remember { mutableStateOf(post?.likes?.contains(currentUser) == true) }
-    var likeCount by remember { mutableStateOf(post?.likes?.size ?: 0) }
     var commentCount by remember { mutableStateOf(post?.comments?.size ?: 0) }
 
     post?.let {
@@ -100,7 +99,6 @@ fun DetailPostScreen(postId: String, navController: NavController, viewModel: Co
                             IconButton(onClick = { 
                                 viewModel.likePost(postId)
                                 isLiked = !isLiked
-                                likeCount += if (isLiked) 1 else -1
                             }) {
                                 Icon(
                                     imageVector = Icons.Filled.Favorite,
@@ -108,7 +106,7 @@ fun DetailPostScreen(postId: String, navController: NavController, viewModel: Co
                                     tint = if (isLiked) Color.Red else Color.Gray
                                 )
                             }
-                            Text(text = "$likeCount")
+                            Text(text = "${post!!.likes.size}")
                         }
                         Spacer(modifier = Modifier.width(16.dp))
                         Button(onClick = { navController.navigate("postComment/$postId") }) {
