@@ -216,8 +216,23 @@ fun AppNavHost(
             }
         }
 
+        // Community
         composable("community") {
             CommunityScreen(navController, viewModel = communityViewModel)
+        }
+        composable("searchScreen") {
+            SearchScreen(query = "", navController = navController, viewModel = communityViewModel)
+        }
+        composable("createPost") {
+            CreatePostScreen(navController = navController, viewModel = communityViewModel)
+        }
+        composable("detailPost/{postId}") { backStackEntry ->
+            val postId = backStackEntry.arguments?.getString("postId") ?: ""
+            DetailPostScreen(postId = postId, navController = navController, viewModel = communityViewModel)
+        }
+        composable("postComment/{postId}") { backStackEntry ->
+            val postId = backStackEntry.arguments?.getString("postId") ?: ""
+            PostCommentScreen(postId = postId, navController = navController, viewModel = communityViewModel)
         }
 
         composable("journal") {
