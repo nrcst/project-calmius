@@ -1,0 +1,28 @@
+Index: app/src/main/java/com/l5/calmius/App.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.l5.calmius\r\n\r\nimport android.os.Bundle\r\nimport androidx.activity.ComponentActivity\r\nimport androidx.activity.compose.setContent\r\nimport androidx.activity.viewModels\r\nimport androidx.compose.runtime.LaunchedEffect\r\nimport androidx.compose.ui.platform.LocalContext\r\nimport androidx.navigation.compose.rememberNavController\r\nimport com.l5.calmius.ui.theme.CalmiusTheme\r\nimport androidx.compose.ui.Modifier\r\nimport com.l5.calmius.feature.journaling.data.JournalRepository\r\nimport com.l5.calmius.feature.journaling.presentation.JournalViewModel\r\nimport com.l5.calmius.feature.journaling.presentation.JournalViewModelFactory\r\nimport com.l5.calmius.features.journaling.data.JournalDatabase\r\nimport com.l5.calmius.Navigation.AppNavHost\r\nimport com.l5.calmius.Navigation.MainScreen\r\nimport kotlinx.coroutines.CoroutineScope\r\nimport kotlinx.coroutines.Dispatchers\r\nimport kotlinx.coroutines.SupervisorJob\r\nimport com.l5.calmius.features.meditation.data.DatabaseProvider\r\nimport com.l5.calmius.features.meditation.data.populateDatabase\r\nimport kotlinx.coroutines.launch\r\nimport com.google.firebase.FirebaseApp\r\nimport com.google.firebase.auth.FirebaseAuth\r\n\r\nclass MainActivity : ComponentActivity() {\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        FirebaseApp.initializeApp(this)\r\n\r\n        val auth = FirebaseAuth.getInstance()\r\n\r\n        setContent {\r\n            CalmiusTheme {\r\n                val context = LocalContext.current\r\n                val journalRepository = JournalRepository(\r\n                    journalDao = JournalDatabase.getDatabase(context).journalDao()\r\n                )\r\n                val journalViewModel: JournalViewModel by viewModels {\r\n                    JournalViewModelFactory(journalRepository)\r\n                }\r\n\r\n                val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)\r\n                val meditationDatabase = DatabaseProvider.getDatabase(context, applicationScope)\r\n\r\n                LaunchedEffect(Unit) {\r\n                    applicationScope.launch {\r\n                        populateDatabase(meditationDatabase.meditationTrackDao())\r\n                    }\r\n                }\r\n\r\n                MainScreen(journalViewModel = journalViewModel)\r\n            }\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/l5/calmius/App.kt b/app/src/main/java/com/l5/calmius/App.kt
+--- a/app/src/main/java/com/l5/calmius/App.kt	
++++ b/app/src/main/java/com/l5/calmius/App.kt	
+@@ -44,11 +44,12 @@
+                 val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+                 val meditationDatabase = DatabaseProvider.getDatabase(context, applicationScope)
+ 
+-                LaunchedEffect(Unit) {
+-                    applicationScope.launch {
+-                        populateDatabase(meditationDatabase.meditationTrackDao())
+-                    }
+-                }
++                // Uncomment to populate meditation records on first time up build
++//                LaunchedEffect(Unit) {
++//                    applicationScope.launch {
++//                        populateDatabase(meditationDatabase.meditationTrackDao())
++//                    }
++//                }
+ 
+                 MainScreen(journalViewModel = journalViewModel)
+             }
