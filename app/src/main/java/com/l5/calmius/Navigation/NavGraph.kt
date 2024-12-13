@@ -11,6 +11,7 @@ import com.l5.calmius.features.meditation.presentation.MeditationScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -30,6 +31,7 @@ import com.example.finalpapb.Auth.presentation.LandingScreen
 import com.google.android.gms.auth.api.identity.Identity
 import com.l5.calmius.feature.journaling.presentation.JournalDetailScreen
 import com.l5.calmius.feature.journaling.presentation.JournalEditScreen
+import com.l5.calmius.features.auth.data.AuthState
 import com.l5.calmius.features.auth.data.AuthViewModel
 import com.l5.calmius.features.auth.data.GoogleAuthUiClient
 import com.l5.calmius.features.auth.presentation.HomeScreen
@@ -64,15 +66,22 @@ fun AppNavHost(
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    val authState = authViewModel.authState.observeAsState()
 
     val googleAuthUiClient = GoogleAuthUiClient(
         context = context.applicationContext,
         oneTapClient = Identity.getSignInClient(context.applicationContext)
     )
 
+    val startDestination = when {
+        googleAuthUiClient.getSignedInUser() != null -> "home"
+        authState.value is AuthState.Authenticated -> "home"
+        else -> "landingScreen"
+    }
+
     NavHost(
         navController = navController,
-        startDestination = "landingScreen",
+        startDestination = startDestination,
         modifier = modifier
     ) {
         // Auth
