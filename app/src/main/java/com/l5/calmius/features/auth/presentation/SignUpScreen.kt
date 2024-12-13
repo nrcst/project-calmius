@@ -196,21 +196,14 @@ fun SignUpScreen(
                     color = Color.Gray
                 )
                 Spacer(modifier = Modifier.height(30.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    SocialButton(
-                        icon = R.drawable.google,
-                        onClick = {
-                            googleSignIn()
-                        }
-                    )
-                    SocialButton(
-                        icon = R.drawable.facebook,
-                        onClick = {  }
-                    )
-                }
+                TransparentLoginButton(
+                    text = "Continue with Google",
+                    icon = R.drawable.google,
+                    borderColor = Color(0xff65849C),
+                    onClick = {
+                        googleSignIn()
+                    }
+                )
                 Spacer(modifier = Modifier.height(25.dp))
                 Text(
                     text = "By continuing, you agree to Calmius's",
@@ -259,32 +252,3 @@ fun SignUpScreen(
         }
     )
 }
-
-@Composable
-fun SocialButton(
-    icon: Int,
-    onClick: () -> Unit
-) {
-    OutlinedButton(
-        onClick = onClick,
-        modifier = Modifier
-            .size(60.dp)
-            .clip(RoundedCornerShape(8.dp)),
-        colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White),
-        contentPadding = PaddingValues(0.dp)
-    ) {
-        Image(
-            painter = painterResource(id = icon),
-            contentDescription = "Social media icon",
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(10.dp)
-        )
-    }
-}
-
-//@Preview(showBackground = true)
-//@Composable
-//fun SignUpPagePreview() {
-//    SignUpPage()
-//}

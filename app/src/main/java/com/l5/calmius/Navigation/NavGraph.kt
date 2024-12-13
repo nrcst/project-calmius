@@ -302,6 +302,7 @@ fun AppNavHost(
         composable("profile") {
             ProfileScreen(
                 userData = googleAuthUiClient.getSignedInUser(),
+                navController = navController,
                 signOut = {
                     coroutineScope.launch {
                         try {
