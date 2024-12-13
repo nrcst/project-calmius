@@ -51,7 +51,7 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(30.dp)
+                .padding(22.dp)
         ) {
             Spacer(modifier = Modifier.height(20.dp))
             Text(
@@ -124,16 +124,6 @@ fun HomeScreen(
                         backgroundColor = Color(0xFFE7DDF0)
                     )
                 }
-            }
-            
-            Button(
-                onClick = {
-                    authViewModel.signOut()
-                },
-            ){
-                Text(
-                    text = "Sign Out"
-                )
             }
         }
     }
