@@ -18,6 +18,7 @@ val Blue200 = Color(0xFFB4DFFF)
 val Blue300 = Color(0xFFA5D8FF)
 val Blue400 = Color(0xFF7397B3)
 val Blue500 = Color(0xFF65849C)
+val TextFieldBackground = Color(0xFFE9F1FC)
 
 object MeditationColors {
     val Mood = Color(0xFFDDF0E7)
