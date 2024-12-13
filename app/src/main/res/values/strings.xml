@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Calmius</string>
     <string name="fileprovider">com.jerry.jetpack_take_select_photo_image.components.fileprovider</string>
+    <string name="web_client_id">564564582672-jb4glt89c2n2gu84jccbl67ak3445uq1.apps.googleusercontent.com</string>
 </resources>

@@ -25,8 +25,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.finalpapb.Auth.data.AuthViewModel
-import com.example.finalpapb.R
+import com.l5.calmius.R
+import com.l5.calmius.features.auth.data.AuthViewModel
 
 @Composable
 fun LandingScreen(
@@ -112,9 +112,3 @@ fun LandingScreen(
         }
     }
 }
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun WelcomeScreenPreview() {
-//    LandingPage(modifier, navController, authViewModel)
-//}
