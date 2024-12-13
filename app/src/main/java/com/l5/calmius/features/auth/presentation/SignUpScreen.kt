@@ -59,7 +59,7 @@ fun SignUpScreen(
     LaunchedEffect(authState.value) {
         when (authState.value) {
             is AuthState.SignupSuccess -> {
-                navController.navigate("profile") {
+                navController.navigate("home") {
                     popUpTo("signup") { inclusive = true }
                 }
                 authViewModel.resetAuthState()
