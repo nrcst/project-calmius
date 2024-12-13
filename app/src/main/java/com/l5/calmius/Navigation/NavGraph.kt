@@ -47,7 +47,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.l5.calmius.features.community.presentation.CommunityScreen
 import com.l5.calmius.features.community.presentation.CommunityViewModel
-import com.l5.calmius.features.community.presentation.SearchBarAndHistoryScreen
 import com.l5.calmius.features.community.presentation.SearchScreen
 import com.l5.calmius.features.community.presentation.CreatePostScreen
 import com.l5.calmius.features.community.presentation.DetailPostScreen
@@ -166,14 +165,9 @@ fun AppNavHost(
             CommunityScreen(navController, viewModel = communityViewModel)
         }
 
-        composable("searchBarAndHistory") {
-            SearchBarAndHistoryScreen(navController, viewModel = communityViewModel)
-        }
-
         // Community
-        composable("searchScreen/{query}") { backStackEntry ->
-            val query = backStackEntry.arguments?.getString("query") ?: ""
-            SearchScreen(query = query, navController = navController, viewModel = communityViewModel)
+        composable("searchScreen") {
+            SearchScreen(query = "", navController = navController, viewModel = communityViewModel)
         }
         composable("createPost") {
             CreatePostScreen(navController = navController, viewModel = communityViewModel)

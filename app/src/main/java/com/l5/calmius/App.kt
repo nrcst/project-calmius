@@ -32,7 +32,6 @@ class MainActivity : ComponentActivity() {
         val auth = FirebaseAuth.getInstance()
 
         if (auth.currentUser == null) {
-            // manual signing buat testing
             auth.signInWithEmailAndPassword("test@user.com", "123456")
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
