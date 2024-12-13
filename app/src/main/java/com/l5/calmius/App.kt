@@ -31,59 +31,26 @@ class MainActivity : ComponentActivity() {
 
         val auth = FirebaseAuth.getInstance()
 
-        if (auth.currentUser == null) {
-            auth.signInWithEmailAndPassword("test@user.com", "123456")
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        setContent {
-                            CalmiusTheme {
-                                val context = LocalContext.current
-                                val journalRepository = JournalRepository(
-                                    journalDao = JournalDatabase.getDatabase(context).journalDao()
-                                )
-                                val journalViewModel: JournalViewModel by viewModels {
-                                    JournalViewModelFactory(journalRepository)
-                                }
+        setContent {
+            CalmiusTheme {
+                val context = LocalContext.current
+                val journalRepository = JournalRepository(
+                    journalDao = JournalDatabase.getDatabase(context).journalDao()
+                )
+                val journalViewModel: JournalViewModel by viewModels {
+                    JournalViewModelFactory(journalRepository)
+                }
 
-                                val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-                                val meditationDatabase = DatabaseProvider.getDatabase(context, applicationScope)
+                val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+                val meditationDatabase = DatabaseProvider.getDatabase(context, applicationScope)
 
-                                LaunchedEffect(Unit) {
-                                    applicationScope.launch {
-                                        populateDatabase(meditationDatabase.meditationTrackDao())
-                                    }
-                                }
-
-                                MainScreen(journalViewModel = journalViewModel)
-                            }
-                        }
-                    } else {
-                        // handle authentication failure
+                LaunchedEffect(Unit) {
+                    applicationScope.launch {
+                        populateDatabase(meditationDatabase.meditationTrackDao())
                     }
                 }
-        } else {
-            setContent {
-                CalmiusTheme {
-                    val context = LocalContext.current
-                    val journalRepository = JournalRepository(
-                        journalDao = JournalDatabase.getDatabase(context).journalDao()
-                    )
-                    val journalViewModel: JournalViewModel by viewModels {
-                        JournalViewModelFactory(journalRepository)
-                    }
 
-                    val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-//                val meditationDatabase = DatabaseProvider.getDatabase(context, applicationScope)
-
-                    // Uncomment to populate meditation records on first time up build
-//                LaunchedEffect(Unit) {
-//                    applicationScope.launch {
-//                        populateDatabase(meditationDatabase.meditationTrackDao())
-//                    }
-//                }
-
-                    MainScreen(journalViewModel = journalViewModel)
-                }
+                MainScreen(journalViewModel = journalViewModel)
             }
         }
     }
