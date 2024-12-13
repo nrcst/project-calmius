@@ -75,127 +75,125 @@ fun JournalEditScreen(
         )
     }
 
-    Column(
-        modifier = modifier.padding(start = 46.dp, end = 46.dp, top = 26.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        Row {
-            Box(
-                modifier = Modifier
-                    .size(50.dp)
-                    .background(Color(0xFFF8FAFC), CircleShape)
-                    .clickable { showDialog.value = true },
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color.Black,
-                    modifier = Modifier.size(20.dp).align(Alignment.Center)
+    Scaffold { innerPadding ->
+        Column(
+            modifier = modifier
+                .padding(innerPadding)
+                .padding(start = 46.dp, end = 46.dp, top = 26.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Row {
+                Box(
+                    modifier = Modifier
+                        .size(50.dp)
+                        .background(Color(0xFFF8FAFC), CircleShape)
+                        .clickable { showDialog.value = true },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.Black,
+                        modifier = Modifier.size(20.dp).align(Alignment.Center)
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(26.dp))
+
+                Text(
+                    text = "Edit Your Stories",
+                    style = Typography.displayLarge,
+                    fontWeight = Typography.displayMedium.fontWeight,
+                    modifier = Modifier.fillMaxWidth().padding(start = 16.dp)
                 )
             }
 
-            Spacer(modifier = Modifier.width(26.dp))
-
-            Text(
-                text = "Edit Your Stories",
-                style = Typography.displayLarge,
-                fontWeight = Typography.displayMedium.fontWeight,
-                modifier = Modifier.fillMaxWidth().padding(start = 16.dp)
+            MyImageArea(
+                uri = if (imageUrl.isNotEmpty()) Uri.parse(imageUrl) else null,
+                onSetUri = { uri -> imageUrl = uri.toString() }
             )
-        }
 
-        MyImageArea(
-            uri = if (imageUrl.isNotEmpty()) Uri.parse(imageUrl) else null,
-            onSetUri = { uri -> imageUrl = uri.toString() }
-        )
-
-//        CustomTextField(
-//            value = title,
-//            onValueChange = { title = it },
-//            label = "Title"
-//        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(100.dp)
-                .background(Blue75, RoundedCornerShape(15.dp))
-                .padding(16.dp)
-        ) {
-            TextField(
-                value = title,
-                onValueChange = {
-                    title = it
-                },
-                modifier = Modifier.fillMaxWidth(),
-                maxLines = 1,
-                placeholder = {
-                    Text(text = "Title",
-                        color = Color.Black,
-                        style = Typography.bodyMedium)
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+                    .background(Blue75, RoundedCornerShape(15.dp))
+                    .padding(16.dp)
+            ) {
+                TextField(
+                    value = title,
+                    onValueChange = {
+                        title = it
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    maxLines = 1,
+                    placeholder = {
+                        Text(text = "Title",
+                            color = Color.Black,
+                            style = Typography.bodyMedium)
+                    },
+                    colors = TextFieldDefaults.textFieldColors(
+                        containerColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    )
                 )
+            }
+
+            CustomTextField(
+                value = story,
+                onValueChange = { story = it },
+                label = "How was your day?",
+                maxLines = 10
             )
-        }
 
-        CustomTextField(
-            value = story,
-            onValueChange = { story = it },
-            label = "How was your day?",
-            maxLines = 10
-        )
+            CustomTextField(
+                value = gratitude,
+                onValueChange = { gratitude = it },
+                label = "What are you grateful today?",
+                maxLines = 10
+            )
 
-        CustomTextField(
-            value = gratitude,
-            onValueChange = { gratitude = it },
-            label = "What are you grateful today?",
-            maxLines = 10
-        )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                val journal = journals.find { it.id == journalId }
+                val journalViewModel = viewModel
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            val journal = journals.find { it.id == journalId }
-            val journalViewModel = viewModel
+                if (journal != null) {
+                    Button(
+                        onClick = {
+                            journalViewModel.deleteJournal(journal)
+                            navController.navigate("journal")
+                        },
+                        modifier = Modifier.width(100.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Blue400),
 
-            if (journal != null) {
+                        ) { Text("Delete") }
+                }
+
                 Button(
                     onClick = {
-                        journalViewModel.deleteJournal(journal)
+                        val updatedJournal = journal?.copy(
+                            title = title,
+                            story = story,
+                            gratitude = gratitude,
+                            imageUrl = imageUrl
+                        ) ?: JournalEntity(
+                            date = getCurrentDate(),
+                            title = title,
+                            story = story,
+                            gratitude = gratitude,
+                            imageUrl = imageUrl
+                        )
+                        journalViewModel.saveJournal(updatedJournal)
                         navController.navigate("journal")
                     },
                     modifier = Modifier.width(100.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Blue400),
-
-                ) { Text("Delete") }
+                    colors = ButtonDefaults.buttonColors(containerColor = Blue400)
+                ) { Text("Submit") }
             }
-
-            Button(
-                onClick = {
-                    val updatedJournal = journal?.copy(
-                        title = title,
-                        story = story,
-                        gratitude = gratitude,
-                        imageUrl = imageUrl
-                    ) ?: JournalEntity(
-                        date = getCurrentDate(),
-                        title = title,
-                        story = story,
-                        gratitude = gratitude,
-                        imageUrl = imageUrl
-                    )
-                    journalViewModel.saveJournal(updatedJournal)
-                    navController.navigate("journal")
-                },
-                modifier = Modifier.width(100.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Blue400)
-            ) { Text("Submit") }
         }
     }
 }
