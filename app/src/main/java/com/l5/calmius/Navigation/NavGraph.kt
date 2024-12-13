@@ -73,7 +73,7 @@ fun AppNavHost(
     )
     NavHost(
         navController = navController,
-        startDestination = "meditation",
+        startDestination = "landingScreen",
         modifier = modifier
     ) {
         // Meditation
