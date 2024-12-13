@@ -62,7 +62,6 @@ fun AppNavHost(
     authViewModel: AuthViewModel,
     modifier: Modifier = Modifier
 ) {
-    val navController = rememberNavController()
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
@@ -70,128 +69,26 @@ fun AppNavHost(
         context = context.applicationContext,
         oneTapClient = Identity.getSignInClient(context.applicationContext)
     )
+
     NavHost(
         navController = navController,
         startDestination = "landingScreen",
         modifier = modifier
     ) {
-        // Meditation
-        composable("meditation") {
-            MeditationScreen { type ->
-                navController.navigate("meditationTrackList/${type.name}")
-            }
-        }
-        composable("meditationTrackList/{type}") { backStackEntry ->
-            val type = MeditationType.valueOf(backStackEntry.arguments?.getString("type") ?: "")
-            MeditationTrackListScreen(
-                type = type,
-                onTrackSelected = { track ->
-                navController.navigate("preStart/${track.id}")
-                },
-                onBack = { navController.popBackStack() }
-            )
-        }
-        composable("preStart/{trackId}") { backStackEntry ->
-            val trackId = backStackEntry.arguments?.getString("trackId")?.toInt() ?: 0
-            val context = LocalContext.current
-            val scope = rememberCoroutineScope()
-            var track by remember { mutableStateOf<MeditationTrack?>(null) }
-
-            LaunchedEffect(trackId) {
-                scope.launch {
-                    val db = DatabaseProvider.getDatabase(context, CoroutineScope(Dispatchers.IO))
-                    track = db.meditationTrackDao().getTrackById(trackId)
-                }
-            }
-
-            track?.let {
-                PreStartScreen(
-                    track = it,
-                    onStartListening = {
-                    navController.navigate("playing/${it.id}")
-                    },
-                    onBack = { navController.popBackStack() }
-                )
-            }
-        }
-        composable("playing/{trackId}") { backStackEntry ->
-            val trackId = backStackEntry.arguments?.getString("trackId")?.toInt() ?: 0
-            val context = LocalContext.current
-            val scope = rememberCoroutineScope()
-            var track by remember { mutableStateOf<MeditationTrack?>(null) }
-
-            LaunchedEffect(trackId) {
-                scope.launch {
-                    val db = DatabaseProvider.getDatabase(context, CoroutineScope(Dispatchers.IO))
-                    track = db.meditationTrackDao().getTrackById(trackId)
-                }
-            }
-
-            track?.let {
-                PlayingScreen(track = it, onFinished = {
-                    navController.navigate("finished")
-                }, onBack = {
-                    navController.popBackStack()
-                })
-            }
-        }
-        composable("finished") {
-            FinishedScreen {
-                navController.navigate("meditation") {
-                    popUpTo("meditation") {
-                        inclusive = true
-                    }
-                }
-            }
-        }
-
-        // Journaling
-        composable("journal") {
-            JournalListScreen(navController, modifier, journalViewModel)
-        }
-        composable("JournalAdd") {
-            JournalAddScreen(navController)
-        }
-        composable("JournalDetail/{journalId}") { backStackEntry ->
-            val journalId = backStackEntry.arguments?.getString("journalId")?.toLong() ?: 0L
-            JournalDetailScreen(navController, journalId, modifier)
-        }
-        composable("JournalEdit/{journalId}") { backStackEntry ->
-            val journalId = backStackEntry.arguments?.getString("journalId")?.toLong() ?: 0L
-            JournalEditScreen(navController, journalId, modifier, journalViewModel)
-        }
-
-        composable(NavigationDestination.Community.route) {
-            CommunityScreen(navController, viewModel = communityViewModel)
-        }
-
-        // Community
-        composable("searchScreen") {
-            SearchScreen(query = "", navController = navController, viewModel = communityViewModel)
-        }
-        composable("createPost") {
-            CreatePostScreen(navController = navController, viewModel = communityViewModel)
-        }
-        composable("detailPost/{postId}") { backStackEntry ->
-            val postId = backStackEntry.arguments?.getString("postId") ?: ""
-            DetailPostScreen(postId = postId, navController = navController, viewModel = communityViewModel)
-        }
-        composable("postComment/{postId}") { backStackEntry ->
-            val postId = backStackEntry.arguments?.getString("postId") ?: ""
-            PostCommentScreen(postId = postId, navController = navController, viewModel = communityViewModel)
-        }
-
         // Auth
         composable("landingScreen") {
             LandingScreen(navController, authViewModel)
         }
+
         composable("signIn") {
             val viewModel = viewModel<AuthViewModel>()
             val state by viewModel.state.collectAsStateWithLifecycle()
 
             LaunchedEffect(key1 = Unit) {
                 if(googleAuthUiClient.getSignedInUser() != null) {
-                    navController.navigate("profile")
+                    navController.navigate("home") {
+                        popUpTo("landingScreen") { inclusive = true }
+                    }
                 }
             }
 
@@ -217,7 +114,9 @@ fun AppNavHost(
                         Toast.LENGTH_LONG
                     ).show()
 
-                    navController.navigate("profile")
+                    navController.navigate("home") {
+                        popUpTo("landingScreen") { inclusive = true }
+                    }
                     viewModel.resetState()
                 }
             }
@@ -238,13 +137,16 @@ fun AppNavHost(
                 }
             )
         }
+
         composable("signUp") {
             val viewModel = viewModel<AuthViewModel>()
             val state by viewModel.state.collectAsStateWithLifecycle()
 
             LaunchedEffect(key1 = Unit) {
                 if(googleAuthUiClient.getSignedInUser() != null) {
-                    navController.navigate("profile")
+                    navController.navigate("home") {
+                        popUpTo("landingScreen") { inclusive = true }
+                    }
                 }
             }
 
@@ -270,10 +172,13 @@ fun AppNavHost(
                         Toast.LENGTH_LONG
                     ).show()
 
-                    navController.navigate("profile")
+                    navController.navigate("home") {
+                        popUpTo("landingScreen") { inclusive = true }
+                    }
                     viewModel.resetState()
                 }
             }
+
             SignUpScreen(
                 navController = navController,
                 authViewModel = authViewModel,
@@ -290,9 +195,26 @@ fun AppNavHost(
                 }
             )
         }
-        composable("homeScreen") {
+
+        // Main
+        composable("home") {
             HomeScreen(navController, authViewModel)
         }
+
+        composable("meditation") {
+            MeditationScreen { type ->
+                navController.navigate("meditationTrackList/${type.name}")
+            }
+        }
+
+        composable("community") {
+            CommunityScreen(navController, viewModel = communityViewModel)
+        }
+
+        composable("journal") {
+            JournalListScreen(navController, modifier, journalViewModel)
+        }
+
         composable("profile") {
             ProfileScreen(
                 userData = googleAuthUiClient.getSignedInUser(),
@@ -320,5 +242,108 @@ fun AppNavHost(
             )
         }
 
+        // Meditation
+        composable("meditationTrackList/{type}") { backStackEntry ->
+            val type = MeditationType.valueOf(backStackEntry.arguments?.getString("type") ?: "")
+            MeditationTrackListScreen(
+                type = type,
+                onTrackSelected = { track ->
+                    navController.navigate("preStart/${track.id}")
+                },
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable("preStart/{trackId}") { backStackEntry ->
+            val trackId = backStackEntry.arguments?.getString("trackId")?.toInt() ?: 0
+            val context = LocalContext.current
+            val scope = rememberCoroutineScope()
+            var track by remember { mutableStateOf<MeditationTrack?>(null) }
+
+            LaunchedEffect(trackId) {
+                scope.launch {
+                    val db = DatabaseProvider.getDatabase(context, CoroutineScope(Dispatchers.IO))
+                    track = db.meditationTrackDao().getTrackById(trackId)
+                }
+            }
+
+            track?.let {
+                PreStartScreen(
+                    track = it,
+                    onStartListening = {
+                        navController.navigate("playing/${it.id}")
+                    },
+                    onBack = { navController.popBackStack() }
+                )
+            }
+        }
+
+        composable("playing/{trackId}") { backStackEntry ->
+            val trackId = backStackEntry.arguments?.getString("trackId")?.toInt() ?: 0
+            val context = LocalContext.current
+            val scope = rememberCoroutineScope()
+            var track by remember { mutableStateOf<MeditationTrack?>(null) }
+
+            LaunchedEffect(trackId) {
+                scope.launch {
+                    val db = DatabaseProvider.getDatabase(context, CoroutineScope(Dispatchers.IO))
+                    track = db.meditationTrackDao().getTrackById(trackId)
+                }
+            }
+
+            track?.let {
+                PlayingScreen(
+                    track = it,
+                    onFinished = {
+                        navController.navigate("finished")
+                    },
+                    onBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+        }
+
+        composable("finished") {
+            FinishedScreen {
+                navController.navigate("meditation") {
+                    popUpTo("meditation") { inclusive = true }
+                }
+            }
+        }
+
+        // Journal
+        composable("JournalAdd") {
+            JournalAddScreen(navController)
+        }
+
+        composable("JournalDetail/{journalId}") { backStackEntry ->
+            val journalId = backStackEntry.arguments?.getString("journalId")?.toLong() ?: 0L
+            JournalDetailScreen(navController, journalId, modifier)
+        }
+
+        composable("JournalEdit/{journalId}") { backStackEntry ->
+            val journalId = backStackEntry.arguments?.getString("journalId")?.toLong() ?: 0L
+            JournalEditScreen(navController, journalId, modifier, journalViewModel)
+        }
+
+        composable("searchScreen/{query}") { backStackEntry ->
+            val query = backStackEntry.arguments?.getString("query") ?: ""
+            SearchScreen(query = query, navController = navController, viewModel = communityViewModel)
+        }
+
+        composable("createPost") {
+            CreatePostScreen(navController = navController, viewModel = communityViewModel)
+        }
+
+        composable("detailPost/{postId}") { backStackEntry ->
+            val postId = backStackEntry.arguments?.getString("postId") ?: ""
+            DetailPostScreen(postId = postId, navController = navController, viewModel = communityViewModel)
+        }
+
+        composable("postComment/{postId}") { backStackEntry ->
+            val postId = backStackEntry.arguments?.getString("postId") ?: ""
+            PostCommentScreen(postId = postId, navController = navController, viewModel = communityViewModel)
+        }
     }
 }
