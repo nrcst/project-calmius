@@ -28,6 +28,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -98,122 +99,126 @@ fun JournalAddScreen(
         )
     }
 
-    Column(
-        modifier = modifier.padding(start = 46.dp, end = 46.dp, top = 26.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
-    ) {
-        Row {
-            Box(
-                modifier = Modifier
-                    .size(50.dp)
-                    .background(Color(0xFFF8FAFC), CircleShape)
-                    .clickable { showDialog.value = true },
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color.Black,
-                    modifier = Modifier.size(20.dp).align(Alignment.Center)
-                )
-            }
-            Spacer(modifier = Modifier.width(26.dp))
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = "Write Your Stories",
-                        style = Typography.displayLarge,
-                        fontWeight = Typography.displayMedium.fontWeight
-                    )
-                }
-                Box(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = "Today",
-                        style = Typography.displayLarge,
-                        fontWeight = Typography.displayMedium.fontWeight
-                    )
-                }
-            }
-        }
-        MyImageArea(
-            uri = if (imageUrl.value.isNotEmpty()) Uri.parse(imageUrl.value) else null,
-            onSetUri = { uri -> imageUrl.value = uri.toString() }
-        )
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(100.dp)
-                .background(Blue75, RoundedCornerShape(15.dp))
-                .padding(16.dp)
+    Scaffold { innerPadding ->
+        Column(
+            modifier = modifier
+                .padding(innerPadding)
+                .padding(start = 46.dp, end = 46.dp, top = 26.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            TextField(
-                value = title.value,
-                onValueChange = {
-                    title.value = it
-                    updateFormValidity()
-                },
-                modifier = Modifier.fillMaxWidth(),
-                maxLines = 1,
-                placeholder = {
-                    Text(text = "Title",
-                        color = Color.Black,
-                        style = Typography.bodyMedium)
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                )
-            )
-        }
-
-        CustomTextField(
-            value = story.value,
-            onValueChange = {
-                story.value = it
-                updateFormValidity()
-            },
-            label = "How was your day?",
-            maxLines = 10
-        )
-
-        CustomTextField(
-            value = gratitude.value,
-            onValueChange = {
-                gratitude.value = it
-                updateFormValidity()
-            },
-            label = "What are you grateful today?",
-            maxLines = 10
-        )
-
-        Button(
-            onClick = {
-                val newJournal = JournalEntity(
-                    date = getCurrentDate(),
-                    title = title.value,
-                    story = story.value,
-                    gratitude = gratitude.value,
-                    imageUrl = imageUrl.value
-                )
-                journalViewModel.viewModelScope.launch(Dispatchers.IO) {
-                    journalViewModel.saveJournal(newJournal)
-                    withContext(Dispatchers.Main) {
-                        navHostController.popBackStack()
+            Row {
+                Box(
+                    modifier = Modifier
+                        .size(50.dp)
+                        .background(Color(0xFFF8FAFC), CircleShape)
+                        .clickable { showDialog.value = true },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.Black,
+                        modifier = Modifier.size(20.dp).align(Alignment.Center)
+                    )
+                }
+                Spacer(modifier = Modifier.width(26.dp))
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Box(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "Write Your Stories",
+                            style = Typography.displayLarge,
+                            fontWeight = Typography.displayMedium.fontWeight
+                        )
+                    }
+                    Box(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "Today",
+                            style = Typography.displayLarge,
+                            fontWeight = Typography.displayMedium.fontWeight
+                        )
                     }
                 }
-            },
-            colors = ButtonDefaults.buttonColors(containerColor = Blue400),
-            modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
-            enabled = isFormValid.value
-        ) {
-            Text("Submit")
+            }
+            MyImageArea(
+                uri = if (imageUrl.value.isNotEmpty()) Uri.parse(imageUrl.value) else null,
+                onSetUri = { uri -> imageUrl.value = uri.toString() }
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+                    .background(Blue75, RoundedCornerShape(15.dp))
+                    .padding(16.dp)
+            ) {
+                TextField(
+                    value = title.value,
+                    onValueChange = {
+                        title.value = it
+                        updateFormValidity()
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    maxLines = 1,
+                    placeholder = {
+                        Text(text = "Title",
+                            color = Color.Black,
+                            style = Typography.bodyMedium)
+                    },
+                    colors = TextFieldDefaults.textFieldColors(
+                        containerColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    )
+                )
+            }
+
+            CustomTextField(
+                value = story.value,
+                onValueChange = {
+                    story.value = it
+                    updateFormValidity()
+                },
+                label = "How was your day?",
+                maxLines = 10
+            )
+
+            CustomTextField(
+                value = gratitude.value,
+                onValueChange = {
+                    gratitude.value = it
+                    updateFormValidity()
+                },
+                label = "What are you grateful today?",
+                maxLines = 10
+            )
+
+            Button(
+                onClick = {
+                    val newJournal = JournalEntity(
+                        date = getCurrentDate(),
+                        title = title.value,
+                        story = story.value,
+                        gratitude = gratitude.value,
+                        imageUrl = imageUrl.value
+                    )
+                    journalViewModel.viewModelScope.launch(Dispatchers.IO) {
+                        journalViewModel.saveJournal(newJournal)
+                        withContext(Dispatchers.Main) {
+                            navHostController.popBackStack()
+                        }
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Blue400),
+                modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
+                enabled = isFormValid.value
+            ) {
+                Text("Submit")
+            }
         }
     }
 }
