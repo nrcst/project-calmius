@@ -34,15 +34,15 @@ class FirebaseRepository {
             title = title,
             content = content,
             timestamp = Timestamp.now(),
-            keywords = extractKeywords(content)
+            keywords = extractKeywords(content, title)
         )
         firestore.collection("posts").document(postId).set(post)
     }
 
-    // Helper method to extract keywords
-    private fun extractKeywords(text: String): List<String> {
-        // Simple implementation
-        return text.toLowerCase().split(" ").distinct()
+    private fun extractKeywords(content: String, title: String): List<String> {
+        val contentKeywords = content.split("\\s+".toRegex()).map { it.trim().lowercase() }
+        val titleKeywords = title.split("\\s+".toRegex()).map { it.trim().lowercase() }
+        return (contentKeywords + titleKeywords).distinct()
     }
 
     fun likePost(postId: String) {
