@@ -189,7 +189,7 @@ fun SignInScreen(
                     fontSize = 15.sp,
                     color = Color.Gray
                 )
-                Spacer(modifier = Modifier.height(30.dp))
+                Spacer(modifier = Modifier.height(50.dp))
                 TransparentLoginButton(
                     text = "Continue with Google",
                     icon = R.drawable.google,
@@ -198,14 +198,7 @@ fun SignInScreen(
                         googleSignIn()
                     }
                 )
-                Spacer(modifier = Modifier.height(15.dp))
-                TransparentLoginButton(
-                    text = "Continue with Facebook",
-                    icon = R.drawable.facebook,
-                    borderColor = Color(0xff65849C),
-                    onClick = { /*TODO*/ }
-                )
-                Spacer(modifier = Modifier.height(30.dp))
+                Spacer(modifier = Modifier.height(50.dp))
                 Text(
                     text = "By continuing, you agree to Calmius's",
                     color = Color.Gray,
@@ -284,9 +277,3 @@ fun TransparentLoginButton(
 
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun SignInPagePreview() {
-//    SignInPage()
-//}

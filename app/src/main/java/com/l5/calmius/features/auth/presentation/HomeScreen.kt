@@ -188,10 +188,3 @@ fun SessionCard(
         }
     }
 }
-
-
-//@Preview(showBackground = true)
-//@Composable
-//fun HomePagePreview() {
-//    HomePage()
-//}
