@@ -1,6 +1,8 @@
 package com.l5.calmius.features.journaling.presentation
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,6 +24,8 @@ import com.l5.calmius.feature.journaling.data.JournalEntity
 import com.l5.calmius.feature.journaling.presentation.JournalViewModel
 import com.l5.calmius.ui.theme.Blue75
 import com.l5.calmius.ui.theme.Typography
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @Composable
 fun JournalListItem(
@@ -29,11 +33,16 @@ fun JournalListItem(
     journal: JournalEntity,
     journalViewModel: JournalViewModel,
 ) {
+    val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+    val formattedDate = journal?.date?.let {
+        dateFormat.format(SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(it)!!)
+    } ?: "Unknown Date"
+
     Card(
         modifier = Modifier
-            .padding(8.dp)
+            .padding(14.dp)
             .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp)),
+            .clip(RoundedCornerShape(16.dp)),
         elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(containerColor = Blue75),
         onClick = {
@@ -41,34 +50,60 @@ fun JournalListItem(
         }
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
         ) {
-            Text(
-                text = journal.title,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.fillMaxWidth()
-            )
-            Text(
-                text = journal.date,
-                style = Typography.bodySmall,
-                modifier = Modifier.fillMaxWidth()
-            )
-            AsyncImage(
-                model = journal.imageUrl,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
-                    .clip(RoundedCornerShape(8.dp))
-            )
-            Text(
-                text = journal.story,
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.fillMaxWidth(),
-                style = Typography.bodyMedium
-            )
+                    .padding(start = 16.dp, top = 10.dp)
+            ){
+                Text(
+                    text = journal.title,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, top = 8.dp)
+            ){
+                Text(
+                    text = formattedDate,
+                    style = Typography.bodySmall,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp, bottom = 8.dp)
+            ){
+                AsyncImage(
+                    model = journal.imageUrl,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .height(200.dp)
+//                        .clip(RoundedCornerShape(8.dp))
+                )
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ){
+                Text(
+                    text = journal.story,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.fillMaxWidth(),
+                    style = Typography.bodyMedium
+                )
+            }
         }
     }
 }
