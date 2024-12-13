@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId = "com.l5.calmius"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -82,6 +82,13 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.1.1"))
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
+
+    val camerax_version = "1.4.0"
+    implementation ("androidx.camera:camera-core:$camerax_version")
+    implementation ("androidx.camera:camera-camera2:$camerax_version")
+    implementation ("androidx.camera:camera-lifecycle:$camerax_version")
+    implementation ("androidx.camera:camera-view:1.0.0-alpha32")
+    implementation ("androidx.camera:camera-extensions:1.0.0-alpha32")
 
 
     //Room

@@ -10,8 +10,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.l5.calmius.feature.journaling.data.JournalEntity
@@ -46,26 +48,53 @@ fun JournalListScreen(
             }
         }
     ) { innerPadding ->
-        Column(modifier = modifier
-            .padding(innerPadding)
-            .padding(16.dp)) {
+        Column(
+            modifier = modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+                .padding(start = 32.dp, end = 32.dp, top = 12.dp)
+        ) {
             Text(
                 text = "My Journal",
-                style = Typography.displayMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
+                style = Typography.displayLarge,
+                fontWeight = Typography.displayMedium.fontWeight,
+                modifier = Modifier.padding(start = 10.dp)
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             Text(
                 text = "Everydays is part of your life",
-                style = Typography.displayMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
+                style = Typography.bodyLarge,
+                fontWeight = Typography.bodySmall.fontWeight,
+                modifier = Modifier.padding(start = 10.dp),
+                color = Color.Gray
             )
-            LazyColumn(modifier = modifier) {
-                items(journals) { journal ->
-                    JournalListItem(
-                        journal = journal,
-                        journalViewModel = viewModel,
-                        navController = navController
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (journals.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Let's write your stories!",
+                        style = Typography.bodyLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Gray
                     )
+                }
+            } else {
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    items(journals) { journal ->
+                        JournalListItem(
+                            journal = journal,
+                            journalViewModel = viewModel,
+                            navController = navController
+                        )
+                    }
                 }
             }
         }

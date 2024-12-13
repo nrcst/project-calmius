@@ -11,6 +11,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.l5.calmius.Navigation.AppNavHost
 import com.l5.calmius.feature.journaling.presentation.JournalViewModel
+import com.l5.calmius.features.auth.data.AuthViewModel
 import com.l5.calmius.features.community.presentation.CommunityViewModel
 import com.l5.calmius.features.community.data.FirebaseRepository
 
@@ -20,6 +21,7 @@ fun MainScreen(journalViewModel: JournalViewModel) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val communityViewModel: CommunityViewModel = viewModel()
+    val authViewModel: AuthViewModel = viewModel()
 
     val showBottomBar = currentDestination?.route in listOf(
         "home", "meditation", "community", "journal", "profile"
@@ -36,6 +38,7 @@ fun MainScreen(journalViewModel: JournalViewModel) {
             navController = navController,
             journalViewModel = journalViewModel,
             communityViewModel = communityViewModel,
+            authViewModel = authViewModel,
             modifier = Modifier.padding(it)
         )
     }

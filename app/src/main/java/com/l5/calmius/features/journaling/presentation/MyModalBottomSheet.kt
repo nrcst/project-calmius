@@ -40,13 +40,6 @@ fun MyModalBottomSheet(
         },
         items = listOf(
             BottomSheetItem(
-                title = "Take Photo",
-                icon = Icons.Default.AccountBox,
-                onClick = {
-                    onTakePhotoClick.invoke()
-                }
-            ),
-            BottomSheetItem(
                 title = "select image",
                 icon = Icons.Default.Place,
                 onClick = {

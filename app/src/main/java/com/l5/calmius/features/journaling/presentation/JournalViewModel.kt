@@ -44,7 +44,9 @@ class JournalViewModel(
 
     fun deleteJournal(journal: JournalEntity) {
         viewModelScope.launch {
-            journalRepository.deleteJournal(journal)
+            withContext(Dispatchers.IO) {
+                journalRepository.deleteJournal(journal)
+            }
         }
     }
 }
